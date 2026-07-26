@@ -23,5 +23,33 @@
   "carte": {
     "valide": "validé",
     "attente": "en attente"
+  },
+  "nav": {
+    "apercu": "Aperçu",
+    "coursiers": "Coursiers",
+    "partenaires": "Partenaires",
+    "agents": "Agents",
+    "export": "Export",
+    "deconnexion": "Déconnexion"
+  },
+  "tableau": {
+    "titre": "Recensement national",
+    "sousTitre": "Suivi en temps réel · 10 régions",
+    "coursiers": "Coursiers recensés",
+    "partenaires": "Partenaires",
+    "attente": "En attente",
+    "agentsActifs": "Agents actifs",
+    "densite": "Densité par région",
+    "elevee": "Élevée",
+    "moyenne": "Moyenne",
+    "faible": "Faible",
+    "recents": "Recensements récents",
+    "toutVoir": "Tout voir",
+    "activiteAgents": "Activité des agents",
+    "recensements": "recensements",
+    "repartition": "Répartition par véhicule",
+    "survolez": "Survolez une région",
+    "aucuneDonnee": "Aucune donnée pour le moment",
+    "chargement": "Chargement..."
   }
 }

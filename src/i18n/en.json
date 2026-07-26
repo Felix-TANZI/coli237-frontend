@@ -23,5 +23,33 @@
   "carte": {
     "valide": "verified",
     "attente": "pending"
+  },
+  "nav": {
+    "apercu": "Overview",
+    "coursiers": "Couriers",
+    "partenaires": "Partners",
+    "agents": "Agents",
+    "export": "Export",
+    "deconnexion": "Sign out"
+  },
+  "tableau": {
+    "titre": "National census",
+    "sousTitre": "Live tracking · 10 regions",
+    "coursiers": "Couriers recorded",
+    "partenaires": "Partners",
+    "attente": "Pending",
+    "agentsActifs": "Active agents",
+    "densite": "Density by region",
+    "elevee": "High",
+    "moyenne": "Medium",
+    "faible": "Low",
+    "recents": "Recent records",
+    "toutVoir": "See all",
+    "activiteAgents": "Agent activity",
+    "recensements": "records",
+    "repartition": "Vehicle breakdown",
+    "survolez": "Hover a region",
+    "aucuneDonnee": "No data yet",
+    "chargement": "Loading..."
   }
 }
