@@ -1,17 +1,27 @@
 {
   "app": {
-    "nom": "COLI Admin"
+    "nom": "COLI",
+    "sousTitre": "Field census"
   },
   "connexion": {
+    "accroche": "Every courier counted, in the field.",
+    "description": "Cameroon's courier and partner registry, kept by your agents.",
     "titre": "Administrator area",
     "sousTitre": "Sign in to manage records",
     "identifiant": "Email or phone",
+    "identifiantExemple": "admin@coli237.com",
     "motDePasse": "Password",
+    "afficher": "Show password",
+    "masquer": "Hide password",
+    "seSouvenir": "Remember me",
+    "oublie": "Forgot password?",
     "bouton": "Sign in",
     "chargement": "Signing in...",
-    "erreur": "Incorrect username or password"
+    "erreur": "Incorrect username or password",
+    "aideOubli": "To reset your password, contact your administrator."
   },
-  "commun": {
-    "langue": "Language"
+  "carte": {
+    "valide": "verified",
+    "attente": "pending"
   }
 }

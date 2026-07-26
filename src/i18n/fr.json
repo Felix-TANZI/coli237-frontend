@@ -1,17 +1,27 @@
 {
   "app": {
-    "nom": "COLI Admin"
+    "nom": "COLI",
+    "sousTitre": "Recensement terrain"
   },
   "connexion": {
+    "accroche": "Chaque livreur compté, sur le terrain.",
+    "description": "Le registre des coursiers et partenaires du Cameroun, tenu par vos agents.",
     "titre": "Espace administrateur",
     "sousTitre": "Connectez-vous pour gérer les recensements",
     "identifiant": "Email ou téléphone",
+    "identifiantExemple": "admin@coli237.com",
     "motDePasse": "Mot de passe",
+    "afficher": "Afficher le mot de passe",
+    "masquer": "Masquer le mot de passe",
+    "seSouvenir": "Se souvenir de moi",
+    "oublie": "Mot de passe oublié ?",
     "bouton": "Se connecter",
     "chargement": "Connexion...",
-    "erreur": "Identifiant ou mot de passe incorrect"
+    "erreur": "Identifiant ou mot de passe incorrect",
+    "aideOubli": "Pour réinitialiser votre mot de passe, contactez votre administrateur."
   },
-  "commun": {
-    "langue": "Langue"
+  "carte": {
+    "valide": "validé",
+    "attente": "en attente"
   }
 }

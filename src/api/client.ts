@@ -6,9 +6,11 @@ export const api = axios.create({
   baseURL: URL_API,
 });
 
-// Ajoute automatiquement le jeton a chaque requete, s'il existe.
+// Ajoute le jeton a chaque requete. Cherche dans les deux stockages :
+// localStorage (se souvenir) ou sessionStorage (session seule).
 api.interceptors.request.use((config) => {
-  const jeton = localStorage.getItem('coli_jeton');
+  const jeton =
+    localStorage.getItem('coli_jeton') ?? sessionStorage.getItem('coli_jeton');
   if (jeton) {
     config.headers.Authorization = `Bearer ${jeton}`;
   }

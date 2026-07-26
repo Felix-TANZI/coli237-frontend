@@ -2,6 +2,7 @@
 
 @theme {
   --color-coli-orange: #f28c28;
+  --color-coli-orange-fonce: #e07d1c;
   --color-coli-cyan: #17a2b8;
   --color-coli-vert: #1fb89e;
   --color-coli-encre: #0e1a24;
@@ -10,11 +11,110 @@
 
 body {
   margin: 0;
-  font-family:
-    'Inter',
-    -apple-system,
-    'Segoe UI',
-    sans-serif;
-  background: var(--color-coli-craie);
+  font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
   color: var(--color-coli-encre);
+}
+
+/* Frontieres des regions qui se dessinent */
+.cm-reg {
+  fill: rgba(31, 184, 158, 0.05);
+  stroke: #1fb89e;
+  stroke-width: 0.8;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: cm-draw 2.2s ease forwards;
+}
+@keyframes cm-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Points de recensement */
+.cm-ping {
+  fill: none;
+  stroke: #f28c28;
+  opacity: 0;
+  animation: cm-ping 2.6s ease-out infinite;
+}
+@keyframes cm-ping {
+  0% {
+    r: 3.5;
+    opacity: 0.6;
+  }
+  100% {
+    r: 20;
+    opacity: 0;
+  }
+}
+.cm-dot {
+  opacity: 0;
+  animation: cm-pop 0.4s ease forwards;
+}
+@keyframes cm-pop {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Cartes flottantes coursier / entreprise */
+.coli-carte {
+  opacity: 0;
+}
+.coli-carte-1 {
+  animation:
+    coli-in 0.7s ease 2.6s forwards,
+    coli-float 5s ease-in-out 3.3s infinite;
+}
+.coli-carte-2 {
+  animation:
+    coli-in 0.7s ease 3.2s forwards,
+    coli-float 6s ease-in-out 4s infinite;
+}
+@keyframes coli-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes coli-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* Formulaire en verre qui monte */
+.coli-glass {
+  animation: coli-rise 0.8s ease 0.3s both;
+}
+@keyframes coli-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-reg,
+  .cm-ping,
+  .cm-dot,
+  .coli-carte,
+  .coli-glass {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
 }

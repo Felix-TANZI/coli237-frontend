@@ -1,8 +1,8 @@
-import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import { initReactI18next } from 'react-i18next';
-import en from './en.json';
-import fr from './fr.json';
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next } from "react-i18next";
+import en from "./en.json";
+import fr from "./fr.json";
 
 // Bilingue FR/EN. La langue est detectee (navigateur, choix precedent)
 // puis memorisee. Francais par defaut.
@@ -14,7 +14,7 @@ void i18n
       fr: { translation: fr },
       en: { translation: en },
     },
-    fallbackLng: 'fr',
+    fallbackLng: "fr",
     interpolation: { escapeValue: false },
   });
 
