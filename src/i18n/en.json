@@ -1,0 +1,17 @@
+{
+  "app": {
+    "nom": "COLI Admin"
+  },
+  "connexion": {
+    "titre": "Administrator area",
+    "sousTitre": "Sign in to manage records",
+    "identifiant": "Email or phone",
+    "motDePasse": "Password",
+    "bouton": "Sign in",
+    "chargement": "Signing in...",
+    "erreur": "Incorrect username or password"
+  },
+  "commun": {
+    "langue": "Language"
+  }
+}

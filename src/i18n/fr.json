@@ -1,0 +1,17 @@
+{
+  "app": {
+    "nom": "COLI Admin"
+  },
+  "connexion": {
+    "titre": "Espace administrateur",
+    "sousTitre": "Connectez-vous pour gérer les recensements",
+    "identifiant": "Email ou téléphone",
+    "motDePasse": "Mot de passe",
+    "bouton": "Se connecter",
+    "chargement": "Connexion...",
+    "erreur": "Identifiant ou mot de passe incorrect"
+  },
+  "commun": {
+    "langue": "Langue"
+  }
+}
