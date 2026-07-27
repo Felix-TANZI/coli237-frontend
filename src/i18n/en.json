@@ -267,5 +267,22 @@
     "cniErreur": "The ID number looks incorrect",
     "momoAide": "Mobile Money number (starts with 6)",
     "momoErreur": "Invalid Mobile Money number"
+  },
+  "mesFiches": {
+    "titre": "My records",
+    "sousTitre": "{{total}} record in total",
+    "sousTitre_plural": "{{total}} records in total",
+    "rechercher": "Search...",
+    "tous": "All",
+    "coursiers": "Couriers",
+    "partenaires": "Companies",
+    "attente": "Pending",
+    "valides": "Verified",
+    "rejetes": "Rejected",
+    "aucun": "No records yet",
+    "aucunFiltre": "No records match",
+    "statutValide": "Verified",
+    "statutAttente": "Pending",
+    "statutRejete": "Rejected"
   }
 }

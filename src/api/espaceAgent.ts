@@ -96,3 +96,52 @@ export async function mesRecensements(): Promise<MesStats> {
 
   return { recenses: tout.length, attente, valides, ceJour, rythme, recents };
 }
+
+export interface MaFiche {
+  id: string;
+  nom: string;
+  type: string;
+  categorie: 'coursier' | 'partenaire';
+  lieu: string;
+  statut: string;
+  date: string;
+}
+
+// Liste complète des fiches créées par l'agent (pour la page "Mes fiches").
+export async function mesFiches(): Promise<MaFiche[]> {
+  const moi = agentConnecte();
+  const monId = moi?.id;
+
+  const [coursiers, partenaires] = await Promise.all([
+    api.get<Coursier[]>('/coursiers').then((r) => r.data),
+    api.get<Fiche[]>('/partenaires').then((r) => r.data),
+  ]);
+
+  const mesCoursiers = coursiers
+    .filter((c) => c.agentId === monId)
+    .map((c) => ({
+      id: c.id,
+      nom: c.nom,
+      type: c.typeVehicule,
+      categorie: 'coursier' as const,
+      lieu: c.ville ?? '—',
+      statut: c.statut,
+      date: c.createdAt,
+    }));
+
+  const mesPartenaires = partenaires
+    .filter((p) => p.agentId === monId)
+    .map((p) => ({
+      id: p.id,
+      nom: p.nom,
+      type: 'Partenaire',
+      categorie: 'partenaire' as const,
+      lieu: p.ville ?? '—',
+      statut: p.statut,
+      date: p.createdAt,
+    }));
+
+  return [...mesCoursiers, ...mesPartenaires].sort((a, b) =>
+    b.date.localeCompare(a.date),
+  );
+}

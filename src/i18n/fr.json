@@ -267,5 +267,22 @@
     "cniErreur": "Le numéro CNI semble incorrect",
     "momoAide": "Numéro Mobile Money (commence par 6)",
     "momoErreur": "Numéro Mobile Money invalide"
+  },
+  "mesFiches": {
+    "titre": "Mes fiches",
+    "sousTitre": "{{total}} recensement au total",
+    "sousTitre_plural": "{{total}} recensements au total",
+    "rechercher": "Rechercher...",
+    "tous": "Tous",
+    "coursiers": "Coursiers",
+    "partenaires": "Entreprises",
+    "attente": "En attente",
+    "valides": "Validés",
+    "rejetes": "Rejetés",
+    "aucun": "Aucune fiche pour l'instant",
+    "aucunFiltre": "Aucune fiche ne correspond",
+    "statutValide": "Validé",
+    "statutAttente": "En attente",
+    "statutRejete": "Rejeté"
   }
 }
