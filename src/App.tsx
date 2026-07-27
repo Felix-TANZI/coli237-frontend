@@ -6,6 +6,7 @@ import { Export } from './pages/Export';
 import { Partenaires } from './pages/Partenaires';
 import { TableauDeBord } from './pages/TableauDeBord';
 import { AccueilAgent } from './pages/agent/AccueilAgent';
+import { Recenser } from './pages/agent/Recenser';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
       {/* Espace agent */}
       <Route path="/agent" element={<AccueilAgent />} />
+      <Route path="/agent/recenser" element={<Recenser />} />
 
       <Route path="*" element={<Navigate to="/connexion" replace />} />
     </Routes>
