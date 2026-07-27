@@ -257,7 +257,9 @@
     "operateurAuto": "Detected as you type the number",
     "operateurDetecte": "Detected automatically",
     "marqueAide": "Pick a brand or type freely",
-    "quartierAide": "Suggested districts for this city" 
+    "quartierAide": "Suggested districts for this city",
+    "succesLocalTitre": "Saved offline",
+    "succesLocalTexte": "The record is saved on the device. It will be sent automatically when the network is back." 
   },
   "validation": {
     "nomCourt": "Name must be at least 2 characters",
@@ -284,5 +286,23 @@
     "statutValide": "Verified",
     "statutAttente": "Pending",
     "statutRejete": "Rejected"
+  },
+  "profil": {
+    "titre": "My profile",
+    "agent": "Field agent",
+    "monActivite": "My activity",
+    "recenses": "Recorded",
+    "valides": "Verified",
+    "enAttente": "Pending",
+    "coordonnees": "My details",
+    "email": "Email",
+    "telephone": "Phone",
+    "membre": "Member since",
+    "preferences": "Preferences",
+    "langue": "Language",
+    "deconnexion": "Sign out",
+    "deconnexionConfirme": "Are you sure you want to sign out?",
+    "annuler": "Cancel",
+    "confirmer": "Sign out"
   }
 }

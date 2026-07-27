@@ -7,6 +7,7 @@ import { AnneauObjectif } from '../../composants/AnneauObjectif';
 import { CompteurAnime } from '../../composants/CompteurAnime';
 import { NavAgentBas, NavAgentHaut } from '../../composants/NavAgent';
 import { useEnLigne } from '../../composants/useEnLigne';
+import { useSynchro } from '../../composants/useSynchro';
 
 function couleurAvatar(nom: string): string {
   const c = ['#1FB89E', '#F28C28', '#17A2B8', '#7F77DD', '#D4537E'];
@@ -36,6 +37,7 @@ export function AccueilAgent() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const enLigne = useEnLigne();
+  const { enAttente: aSynchroniser, enCours: synchroEnCours, lancerSynchro } = useSynchro();
   const moi = agentConnecte();
   const nom = moi?.nom ?? 'Agent';
 
@@ -63,8 +65,19 @@ export function AccueilAgent() {
               <div className="font-extrabold text-xl md:text-2xl" style={{ fontFamily: 'Sora, Inter' }}>
                 {nom}
               </div>
-              {/* État en ligne / hors-ligne */}
-              {enLigne ? (
+              {/* État : à synchroniser / en ligne / hors-ligne */}
+              {aSynchroniser > 0 ? (
+                <button
+                  onClick={() => void lancerSynchro()}
+                  disabled={!enLigne || synchroEnCours}
+                  className="flex items-center gap-1.5 mt-2 w-fit text-xs rounded-lg px-2.5 py-1 transition"
+                  style={{ background: 'rgba(242,140,40,.18)', border: '1px solid rgba(242,140,40,.35)', color: '#F5B87A' }}
+                >
+                  <i className={`ti ${synchroEnCours ? 'ti-loader-2 animate-spin' : 'ti-cloud-up'} text-sm`} />
+                  {t('agent.aSynchroniser', { n: aSynchroniser })}
+                  {enLigne && !synchroEnCours && <i className="ti ti-refresh text-xs ml-0.5" />}
+                </button>
+              ) : enLigne ? (
                 <div className="flex items-center gap-1.5 mt-2 w-fit text-xs rounded-lg px-2.5 py-1" style={{ background: 'rgba(31,184,158,.15)', border: '1px solid rgba(31,184,158,.3)', color: '#5DCAA5' }}>
                   <span className="w-1.5 h-1.5 rounded-full bg-coli-vert ag-pulse" />
                   {t('agent.enLigne')}

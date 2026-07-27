@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { creerCoursier, creerPartenaire } from '../../api/recensement';
+import { creerCoursier, creerPartenaire, type NouveauCoursier, type NouveauPartenaire } from '../../api/recensement';
 import { CadreFormulaire } from '../../composants/formulaire/CadreFormulaire';
 import {
   BlocEtape,
@@ -29,6 +29,7 @@ import {
   quartiersDe,
   VILLES_CAMEROUN,
 } from '../../composants/formulaire/donnees';
+import { ajouterEnLocal } from '../../api/fileLocale';
 
 function couleurAvatar(nom: string): string {
   const c = ['#1FB89E', '#F28C28', '#17A2B8', '#7F77DD', '#D4537E'];
@@ -95,51 +96,79 @@ export function Recenser() {
   const [etat, setEtat] = useState<Etat>(ETAT_INITIAL);
   const [gps, setGps] = useState<Gps>(null);
   const [fini, setFini] = useState(false);
+  const [dernierLocal, setDernierLocal] = useState(false);
 
   const set = <K extends keyof Etat>(cle: K, val: Etat[K]) =>
     setEtat((e) => ({ ...e, [cle]: val }));
 
   const creation = useMutation({
+    networkMode: 'always',
     mutationFn: async () => {
-      if (type === 'coursier') {
-        return creerCoursier({
-          nom: etat.nom.trim(),
-          telephone: nettoyerNumero(etat.telephone),
-          cni: etat.cni.trim() || undefined,
-          ville: etat.ville.trim() || undefined,
-          quartier: etat.quartier.trim() || undefined,
-          typeVehicule: etat.typeVehicule,
-          plaque: vehiculeAvecPlaque(etat.typeVehicule) && etat.plaque.trim() ? etat.plaque.trim() : undefined,
-          marqueModele: vehiculeAvecPlaque(etat.typeVehicule) && etat.marqueModele.trim() ? etat.marqueModele.trim() : undefined,
-          aPermis: vehiculeAvecPlaque(etat.typeVehicule) ? etat.aPermis : false,
-          permisCategorie: etat.aPermis && etat.permisCategorie ? etat.permisCategorie : undefined,
-          aCarteGrise: vehiculeAvecPlaque(etat.typeVehicule) ? etat.aCarteGrise : false,
-          aAssurance: vehiculeAvecPlaque(etat.typeVehicule) ? etat.aAssurance : false,
-          aCarteSmt: etat.aCarteSmt,
-          mobileMoneyNumero: etat.momoNumero ? nettoyerNumero(etat.momoNumero) : undefined,
-          mobileMoneyOperateur: detecterOperateur(etat.momoNumero) ?? undefined,
-          latitude: gps?.lat,
-          longitude: gps?.lng,
+      // Construit les données selon le type.
+      const donnees =
+        type === 'coursier'
+          ? {
+              nom: etat.nom.trim(),
+              telephone: nettoyerNumero(etat.telephone),
+              cni: etat.cni.trim() || undefined,
+              ville: etat.ville.trim() || undefined,
+              quartier: etat.quartier.trim() || undefined,
+              typeVehicule: etat.typeVehicule,
+              plaque: vehiculeAvecPlaque(etat.typeVehicule) && etat.plaque.trim() ? etat.plaque.trim() : undefined,
+              marqueModele: vehiculeAvecPlaque(etat.typeVehicule) && etat.marqueModele.trim() ? etat.marqueModele.trim() : undefined,
+              aPermis: vehiculeAvecPlaque(etat.typeVehicule) ? etat.aPermis : false,
+              permisCategorie: etat.aPermis && etat.permisCategorie ? etat.permisCategorie : undefined,
+              aCarteGrise: vehiculeAvecPlaque(etat.typeVehicule) ? etat.aCarteGrise : false,
+              aAssurance: vehiculeAvecPlaque(etat.typeVehicule) ? etat.aAssurance : false,
+              aCarteSmt: etat.aCarteSmt,
+              mobileMoneyNumero: etat.momoNumero ? nettoyerNumero(etat.momoNumero) : undefined,
+              mobileMoneyOperateur: detecterOperateur(etat.momoNumero) ?? undefined,
+              latitude: gps?.lat,
+              longitude: gps?.lng,
+            }
+          : {
+              nom: etat.nom.trim(),
+              sigle: etat.sigle.trim() || undefined,
+              niu: etat.niu.trim() || undefined,
+              registreCommerce: etat.registreCommerce.trim() || undefined,
+              responsableNom: etat.responsableNom.trim(),
+              responsableTelephone: nettoyerNumero(etat.responsableTelephone),
+              responsableEmail: etat.responsableEmail.trim() || undefined,
+              ville: etat.ville.trim() || undefined,
+              quartier: etat.quartier.trim() || undefined,
+              adresse: etat.adresse.trim() || undefined,
+              mobileMoneyNumero: etat.momoNumero ? nettoyerNumero(etat.momoNumero) : undefined,
+              mobileMoneyOperateur: detecterOperateur(etat.momoNumero) ?? undefined,
+              latitude: gps?.lat,
+              longitude: gps?.lng,
+            };
+
+      // Hors-ligne : on garde en local, la synchro se fera au retour du réseau.
+      if (!navigator.onLine) {
+        ajouterEnLocal({
+          categorie: type,
+          donnees,
+          apercu: {
+            nom: etat.nom.trim(),
+            type: type === 'coursier' ? etat.typeVehicule : 'Partenaire',
+            lieu: etat.ville.trim() || '—',
+          },
         });
+        return { local: true };
       }
-      return creerPartenaire({
-        nom: etat.nom.trim(),
-        sigle: etat.sigle.trim() || undefined,
-        niu: etat.niu.trim() || undefined,
-        registreCommerce: etat.registreCommerce.trim() || undefined,
-        responsableNom: etat.responsableNom.trim(),
-        responsableTelephone: nettoyerNumero(etat.responsableTelephone),
-        responsableEmail: etat.responsableEmail.trim() || undefined,
-        ville: etat.ville.trim() || undefined,
-        quartier: etat.quartier.trim() || undefined,
-        adresse: etat.adresse.trim() || undefined,
-        mobileMoneyNumero: etat.momoNumero ? nettoyerNumero(etat.momoNumero) : undefined,
-        mobileMoneyOperateur: detecterOperateur(etat.momoNumero) ?? undefined,
-        latitude: gps?.lat,
-        longitude: gps?.lng,
-      });
+
+      // En ligne : envoi normal au serveur.
+      if (type === 'coursier') {
+        await creerCoursier(donnees as NouveauCoursier);
+      } else {
+        await creerPartenaire(donnees as NouveauPartenaire);
+      }
+      return { local: false };
     },
-    onSuccess: () => setFini(true),
+    onSuccess: (res) => {
+      setDernierLocal(res.local);
+      setFini(true);
+    },
   });
 
   const avecPlaque = vehiculeAvecPlaque(etat.typeVehicule);
@@ -378,11 +407,13 @@ export function Recenser() {
   if (fini) {
     return (
       <EcranSucces
+        estLocal={dernierLocal}
         onNouveau={() => {
           setEtat(ETAT_INITIAL);
           setGps(null);
           setEtape(0);
           setFini(false);
+          setDernierLocal(false);
           creation.reset();
         }}
       />

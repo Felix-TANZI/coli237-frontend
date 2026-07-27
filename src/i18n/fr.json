@@ -266,7 +266,9 @@
     "cniAide": "Numéro figurant sur la carte d'identité",
     "cniErreur": "Le numéro CNI semble incorrect",
     "momoAide": "Numéro Mobile Money (commence par 6)",
-    "momoErreur": "Numéro Mobile Money invalide"
+    "momoErreur": "Numéro Mobile Money invalide",
+    "succesLocalTitre": "Enregistré hors-ligne",
+    "succesLocalTexte": "La fiche est sauvegardée sur l'appareil. Elle sera envoyée automatiquement dès le retour du réseau."
   },
   "mesFiches": {
     "titre": "Mes fiches",
@@ -284,5 +286,23 @@
     "statutValide": "Validé",
     "statutAttente": "En attente",
     "statutRejete": "Rejeté"
+  },
+  "profil": {
+    "titre": "Mon profil",
+    "agent": "Agent de terrain",
+    "monActivite": "Mon activité",
+    "recenses": "Recensés",
+    "valides": "Validés",
+    "enAttente": "En attente",
+    "coordonnees": "Mes coordonnées",
+    "email": "Email",
+    "telephone": "Téléphone",
+    "membre": "Membre depuis",
+    "preferences": "Préférences",
+    "langue": "Langue",
+    "deconnexion": "Se déconnecter",
+    "deconnexionConfirme": "Voulez-vous vraiment vous déconnecter ?",
+    "annuler": "Annuler",
+    "confirmer": "Se déconnecter"
   }
 }
