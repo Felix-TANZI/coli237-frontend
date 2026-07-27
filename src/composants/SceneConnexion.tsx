@@ -97,10 +97,10 @@ export function SceneConnexion() {
         }}
       >
         <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-semibold text-white bg-coli-vert">
-          IM
+          FT
         </div>
         <div>
-          <div className="text-white text-[11px] font-medium">Ibrahim Moto</div>
+          <div className="text-white text-[11px] font-medium">Felix TANZI</div>
           <div className="text-coli-vert text-[9px] flex items-center gap-1">
             <i className="ti ti-circle-check text-[10px]" />
             Mvog-Ada · {t('carte.valide')}

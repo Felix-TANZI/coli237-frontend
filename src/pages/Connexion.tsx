@@ -17,7 +17,13 @@ export function Connexion() {
 
   const connexion = useMutation({
     mutationFn: () => seConnecter(identifiant, motDePasse, seSouvenir),
-    onSuccess: () => navigate('/tableau-de-bord'),
+    onSuccess: (data) => {
+      if (data.agent.role === 'ADMIN') {
+        navigate('/tableau-de-bord');
+      } else {
+        navigate('/agent');
+      }
+    },
   });
 
   return (

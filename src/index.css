@@ -6,7 +6,7 @@
   --color-coli-cyan: #17a2b8;
   --color-coli-vert: #1fb89e;
   --color-coli-encre: #0e1a24;
-  --color-coli-craie: #f5f7f8;
+  --color-coli-craie: #eef1f4;
 }
 
 body {
@@ -115,6 +115,56 @@ body {
     animation: none;
     opacity: 1;
     stroke-dashoffset: 0;
+    transform: none;
+  }
+}
+
+/* Animations de l'espace agent */
+@keyframes ag-monte {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ag-anim {
+  opacity: 0;
+  animation: ag-monte 0.5s ease forwards;
+}
+.ag-d1 {
+  animation-delay: 0.05s;
+}
+.ag-d2 {
+  animation-delay: 0.15s;
+}
+.ag-d3 {
+  animation-delay: 0.25s;
+}
+.ag-d4 {
+  animation-delay: 0.35s;
+}
+
+@keyframes ag-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+.ag-pulse {
+  animation: ag-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ag-anim,
+  .ag-pulse {
+    animation: none;
+    opacity: 1;
     transform: none;
   }
 }
