@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 // Anime un nombre de 0 jusqu'a sa valeur.
 export function CompteurAnime({ valeur }: { valeur: number }) {

@@ -1,4 +1,4 @@
-import { api } from './client';
+import { api } from "./client";
 
 export interface NouveauCoursier {
   nom: string;
@@ -38,12 +38,16 @@ export interface NouveauPartenaire {
   longitude?: number;
 }
 
-export async function creerCoursier(donnees: NouveauCoursier): Promise<{ id: string }> {
-  const { data } = await api.post<{ id: string }>('/coursiers', donnees);
+export async function creerCoursier(
+  donnees: NouveauCoursier,
+): Promise<{ id: string }> {
+  const { data } = await api.post<{ id: string }>("/coursiers", donnees);
   return data;
 }
 
-export async function creerPartenaire(donnees: NouveauPartenaire): Promise<{ id: string }> {
-  const { data } = await api.post<{ id: string }>('/partenaires', donnees);
+export async function creerPartenaire(
+  donnees: NouveauPartenaire,
+): Promise<{ id: string }> {
+  const { data } = await api.post<{ id: string }>("/partenaires", donnees);
   return data;
 }

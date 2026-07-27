@@ -1,6 +1,6 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
-import { nombreEnAttente, synchroniser } from '../api/fileLocale';
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
+import { nombreEnAttente, synchroniser } from "../api/fileLocale";
 
 // Gère la synchronisation des fiches locales et expose le compteur en attente.
 export function useSynchro() {
@@ -19,19 +19,18 @@ export function useSynchro() {
     setEnAttente(res.restantes);
     setEnCours(false);
     if (res.envoyees > 0) {
-      // Rafraîchit les listes après synchro réussie.
+      // Rafraichit les listes apres synchro reussie.
       void qc.invalidateQueries({ queryKey: ['mesRecensements'] });
       void qc.invalidateQueries({ queryKey: ['mesFiches'] });
-      void qc.invalidateQueries({ queryKey: ['coursiers'] });
-      void qc.invalidateQueries({ queryKey: ['partenaires'] });
+      void qc.invalidateQueries({ queryKey: ['personnes'] });
     }
   }, [qc]);
 
   // Synchronise automatiquement quand le réseau revient.
   useEffect(() => {
     const auRetour = () => void lancerSynchro();
-    window.addEventListener('online', auRetour);
-    return () => window.removeEventListener('online', auRetour);
+    window.addEventListener("online", auRetour);
+    return () => window.removeEventListener("online", auRetour);
   }, [lancerSynchro]);
 
   // Tente une synchro au montage (si réseau + fiches en attente).

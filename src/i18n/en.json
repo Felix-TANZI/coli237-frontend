@@ -50,7 +50,9 @@
     "repartition": "Vehicle breakdown",
     "survolez": "Hover a region",
     "aucuneDonnee": "No data yet",
-    "chargement": "Loading..."
+    "chargement": "Loading...",
+    "total": "People",
+    "livreurs": "Couriers"
   },
   "coursiers": {
     "titre": "Couriers",
@@ -259,7 +261,7 @@
     "marqueAide": "Pick a brand or type freely",
     "quartierAide": "Suggested districts for this city",
     "succesLocalTitre": "Saved offline",
-    "succesLocalTexte": "The record is saved on the device. It will be sent automatically when the network is back." 
+    "succesLocalTexte": "The record is saved on the device. It will be sent automatically when the network is back."
   },
   "validation": {
     "nomCourt": "Name must be at least 2 characters",

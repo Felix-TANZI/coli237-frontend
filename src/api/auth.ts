@@ -1,4 +1,4 @@
-import { api } from './client';
+import { api } from "./client";
 
 interface ReponseConnexion {
   jeton: string;
@@ -6,7 +6,7 @@ interface ReponseConnexion {
     id: string;
     nom: string;
     email: string;
-    role: 'AGENT' | 'ADMIN';
+    role: "AGENT" | "ADMIN";
     doitChangerMotDePasse: boolean;
   };
 }
@@ -18,26 +18,26 @@ export async function seConnecter(
   motDePasse: string,
   seSouvenir = true,
 ) {
-  const { data } = await api.post<ReponseConnexion>('/auth/connexion', {
+  const { data } = await api.post<ReponseConnexion>("/auth/connexion", {
     identifiant,
     motDePasse,
   });
 
   const stockage = seSouvenir ? localStorage : sessionStorage;
-  stockage.setItem('coli_jeton', data.jeton);
-  stockage.setItem('coli_agent', JSON.stringify(data.agent));
+  stockage.setItem("coli_jeton", data.jeton);
+  stockage.setItem("coli_agent", JSON.stringify(data.agent));
   return data;
 }
 
 export function seDeconnecter() {
-  localStorage.removeItem('coli_jeton');
-  localStorage.removeItem('coli_agent');
-  sessionStorage.removeItem('coli_jeton');
-  sessionStorage.removeItem('coli_agent');
+  localStorage.removeItem("coli_jeton");
+  localStorage.removeItem("coli_agent");
+  sessionStorage.removeItem("coli_jeton");
+  sessionStorage.removeItem("coli_agent");
 }
 
 export function agentConnecte() {
   const brut =
-    localStorage.getItem('coli_agent') ?? sessionStorage.getItem('coli_agent');
+    localStorage.getItem("coli_agent") ?? sessionStorage.getItem("coli_agent");
   return brut ? JSON.parse(brut) : null;
 }

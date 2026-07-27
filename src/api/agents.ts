@@ -1,12 +1,12 @@
-import { api } from './client';
+import { api } from "./client";
 
 export interface Agent {
   id: string;
   nom: string;
   telephone: string;
   email: string;
-  role: 'AGENT' | 'ADMIN';
-  statut: 'ACTIF' | 'SUSPENDU';
+  role: "AGENT" | "ADMIN";
+  statut: "ACTIF" | "SUSPENDU";
   doitChangerMotDePasse: boolean;
   createdAt: string;
 }
@@ -24,12 +24,12 @@ export interface AgentCree {
 }
 
 export async function listerAgents(): Promise<Agent[]> {
-  const { data } = await api.get<Agent[]>('/agents');
+  const { data } = await api.get<Agent[]>("/agents");
   return data;
 }
 
 export async function creerAgent(nouvel: NouvelAgent): Promise<AgentCree> {
-  const { data } = await api.post<AgentCree>('/agents', nouvel);
+  const { data } = await api.post<AgentCree>("/agents", nouvel);
   return data;
 }
 
@@ -44,7 +44,7 @@ export async function reinitialiserMotDePasse(
 
 export async function modifierAgent(
   id: string,
-  champs: Partial<Pick<Agent, 'nom' | 'telephone' | 'email' | 'statut'>>,
+  champs: Partial<Pick<Agent, "nom" | "telephone" | "email" | "statut">>,
 ): Promise<Agent> {
   const { data } = await api.patch<Agent>(`/agents/${id}`, champs);
   return data;

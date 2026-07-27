@@ -50,7 +50,9 @@
     "repartition": "Répartition par véhicule",
     "survolez": "Survolez une région",
     "aucuneDonnee": "Aucune donnée pour le moment",
-    "chargement": "Chargement..."
+    "chargement": "Chargement...",
+    "total": "Personnes",
+    "livreurs": "Livreurs"
   },
   "coursiers": {
     "titre": "Coursiers",

@@ -1,4 +1,4 @@
-import { api } from './client';
+import { api } from "./client";
 
 export interface Coursier {
   id: string;
@@ -24,7 +24,7 @@ export interface Coursier {
 }
 
 export async function listerCoursiers(): Promise<Coursier[]> {
-  const { data } = await api.get<Coursier[]>('/coursiers');
+  const { data } = await api.get<Coursier[]>("/coursiers");
   return data;
 }
 

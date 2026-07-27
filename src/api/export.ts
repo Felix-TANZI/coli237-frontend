@@ -1,10 +1,10 @@
-import { api } from './client';
+import { api } from "./client";
 
 // Telecharge un fichier protege : axios envoie le jeton, puis on
 // force le telechargement cote navigateur.
 async function telecharger(url: string, nomFichier: string): Promise<void> {
-  const reponse = await api.get(url, { responseType: 'blob' });
-  const lien = document.createElement('a');
+  const reponse = await api.get(url, { responseType: "blob" });
+  const lien = document.createElement("a");
   const objet = URL.createObjectURL(reponse.data as Blob);
   lien.href = objet;
   lien.download = nomFichier;
@@ -16,20 +16,29 @@ async function telecharger(url: string, nomFichier: string): Promise<void> {
 
 export function exporterExcel(): Promise<void> {
   const date = new Date().toISOString().slice(0, 10);
-  return telecharger('/export/coursiers.xlsx', `coli237-coursiers-${date}.xlsx`);
+  return telecharger(
+    "/export/coursiers.xlsx",
+    `coli237-coursiers-${date}.xlsx`,
+  );
 }
 
 export function exporterPdf(): Promise<void> {
   const date = new Date().toISOString().slice(0, 10);
-  return telecharger('/export/coursiers.pdf', `coli237-coursiers-${date}.pdf`);
+  return telecharger("/export/coursiers.pdf", `coli237-coursiers-${date}.pdf`);
 }
 
 export function exporterPartenairesExcel(): Promise<void> {
   const date = new Date().toISOString().slice(0, 10);
-  return telecharger('/export/partenaires.xlsx', `coli237-partenaires-${date}.xlsx`);
+  return telecharger(
+    "/export/partenaires.xlsx",
+    `coli237-partenaires-${date}.xlsx`,
+  );
 }
 
 export function exporterPartenairesPdf(): Promise<void> {
   const date = new Date().toISOString().slice(0, 10);
-  return telecharger('/export/partenaires.pdf', `coli237-partenaires-${date}.pdf`);
+  return telecharger(
+    "/export/partenaires.pdf",
+    `coli237-partenaires-${date}.pdf`,
+  );
 }

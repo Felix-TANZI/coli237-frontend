@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
-import { CARTE_VIEWBOX, REGIONS_CAMEROUN, YAOUNDE } from './carteCameroun';
+import { useTranslation } from "react-i18next";
+import { CARTE_VIEWBOX, REGIONS_CAMEROUN, YAOUNDE } from "./carteCameroun";
 
 // Points de recensement animes, places sur quelques regions.
 const POINTS = [
-  { cx: 130.9, cy: 317.6, couleur: '#F28C28', delai: 2.8, ping: true },
-  { cx: 69.5, cy: 332.2, couleur: '#1FB89E', delai: 3.3, ping: true },
-  { cx: 88.4, cy: 287.1, couleur: '#1FB89E', delai: 3.7, ping: false },
-  { cx: 206.2, cy: 180.4, couleur: '#F28C28', delai: 4.1, ping: true },
-  { cx: 39.3, cy: 298.2, couleur: '#1FB89E', delai: 4.5, ping: false },
-  { cx: 228.0, cy: 86.2, couleur: '#1FB89E', delai: 4.9, ping: false },
+  { cx: 130.9, cy: 317.6, couleur: "#F28C28", delai: 2.8, ping: true },
+  { cx: 69.5, cy: 332.2, couleur: "#1FB89E", delai: 3.3, ping: true },
+  { cx: 88.4, cy: 287.1, couleur: "#1FB89E", delai: 3.7, ping: false },
+  { cx: 206.2, cy: 180.4, couleur: "#F28C28", delai: 4.1, ping: true },
+  { cx: 39.3, cy: 298.2, couleur: "#1FB89E", delai: 4.5, ping: false },
+  { cx: 228.0, cy: 86.2, couleur: "#1FB89E", delai: 4.9, ping: false },
 ];
 
 export function SceneConnexion() {
@@ -36,7 +36,11 @@ export function SceneConnexion() {
 
       {/* Carte du Cameroun */}
       <div className="absolute right-[5%] top-1/2 -translate-y-1/2 h-[86%] z-[2] hidden sm:block">
-        <svg viewBox={CARTE_VIEWBOX} className="h-full w-auto" aria-hidden="true">
+        <svg
+          viewBox={CARTE_VIEWBOX}
+          className="h-full w-auto"
+          aria-hidden="true"
+        >
           {REGIONS_CAMEROUN.map((r, i) => (
             <path
               key={r.nom}
@@ -71,7 +75,7 @@ export function SceneConnexion() {
             cy={YAOUNDE.y}
             r="4.5"
             fill="#fff"
-            style={{ animationDelay: '5.4s' }}
+            style={{ animationDelay: "5.4s" }}
           />
           <text
             className="cm-dot"
@@ -80,7 +84,7 @@ export function SceneConnexion() {
             fill="#fff"
             fontSize="8.5"
             fontFamily="Inter"
-            style={{ animationDelay: '5.4s' }}
+            style={{ animationDelay: "5.4s" }}
           >
             Yaoundé
           </text>
@@ -91,9 +95,9 @@ export function SceneConnexion() {
       <div
         className="coli-carte coli-carte-1 absolute top-24 right-8 rounded-xl px-3 py-2 border z-[3] hidden md:flex items-center gap-2"
         style={{
-          background: 'rgba(255,255,255,.07)',
-          borderColor: 'rgba(255,255,255,.09)',
-          backdropFilter: 'blur(6px)',
+          background: "rgba(255,255,255,.07)",
+          borderColor: "rgba(255,255,255,.09)",
+          backdropFilter: "blur(6px)",
         }}
       >
         <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-semibold text-white bg-coli-vert">
@@ -103,7 +107,7 @@ export function SceneConnexion() {
           <div className="text-white text-[11px] font-medium">Felix TANZI</div>
           <div className="text-coli-vert text-[9px] flex items-center gap-1">
             <i className="ti ti-circle-check text-[10px]" />
-            Mvog-Ada · {t('carte.valide')}
+            Mvog-Ada · {t("carte.valide")}
           </div>
         </div>
       </div>
@@ -112,9 +116,9 @@ export function SceneConnexion() {
       <div
         className="coli-carte coli-carte-2 absolute bottom-24 right-16 rounded-xl px-3 py-2 border z-[3] hidden md:flex items-center gap-2"
         style={{
-          background: 'rgba(255,255,255,.07)',
-          borderColor: 'rgba(255,255,255,.09)',
-          backdropFilter: 'blur(6px)',
+          background: "rgba(255,255,255,.07)",
+          borderColor: "rgba(255,255,255,.09)",
+          backdropFilter: "blur(6px)",
         }}
       >
         <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-semibold text-white bg-coli-orange">
@@ -122,9 +126,12 @@ export function SceneConnexion() {
         </div>
         <div>
           <div className="text-white text-[11px] font-medium">Express SARL</div>
-          <div className="text-[9px] flex items-center gap-1" style={{ color: '#F0997B' }}>
+          <div
+            className="text-[9px] flex items-center gap-1"
+            style={{ color: "#F0997B" }}
+          >
             <i className="ti ti-clock text-[10px]" />
-            Bastos · {t('carte.attente')}
+            Bastos · {t("carte.attente")}
           </div>
         </div>
       </div>

@@ -1,18 +1,16 @@
 // File d'attente locale pour le mode hors-ligne.
-// Les fiches créées sans réseau sont stockées ici, puis synchronisées.
+// Les fiches creees sans reseau sont stockees ici, puis synchronisees.
 
-import { creerCoursier, creerPartenaire } from './recensement';
-import type { NouveauCoursier, NouveauPartenaire } from './recensement';
+import { creerPersonne, type NouvellePersonne } from './personnes';
 
 const CLE_STOCKAGE = 'coli_file_locale';
 
 export interface FicheLocale {
   idLocal: string;
-  categorie: 'coursier' | 'partenaire';
-  donnees: NouveauCoursier | NouveauPartenaire;
+  donnees: NouvellePersonne;
   creeeLe: string;
   // Pour l'affichage dans la liste "Mes fiches"
-  apercu: { nom: string; type: string; lieu: string };
+  apercu: { nom: string; role: string; lieu: string };
 }
 
 // Lit la file depuis le stockage.
@@ -25,12 +23,12 @@ export function lireFile(): FicheLocale[] {
   }
 }
 
-// Écrit la file dans le stockage.
+// Ecrit la file dans le stockage.
 function ecrireFile(file: FicheLocale[]): void {
   localStorage.setItem(CLE_STOCKAGE, JSON.stringify(file));
 }
 
-// Ajoute une fiche à la file locale.
+// Ajoute une fiche a la file locale.
 export function ajouterEnLocal(fiche: Omit<FicheLocale, 'idLocal' | 'creeeLe'>): void {
   const file = lireFile();
   file.push({
@@ -41,7 +39,7 @@ export function ajouterEnLocal(fiche: Omit<FicheLocale, 'idLocal' | 'creeeLe'>):
   ecrireFile(file);
 }
 
-// Retire une fiche de la file (après synchronisation réussie).
+// Retire une fiche de la file (apres synchronisation reussie).
 function retirer(idLocal: string): void {
   ecrireFile(lireFile().filter((f) => f.idLocal !== idLocal));
 }
@@ -51,23 +49,19 @@ export function nombreEnAttente(): number {
   return lireFile().length;
 }
 
-// Tente de synchroniser toute la file. Renvoie le nombre de fiches envoyées.
+// Tente de synchroniser toute la file. Renvoie le nombre de fiches envoyees.
 export async function synchroniser(): Promise<{ envoyees: number; restantes: number }> {
   const file = lireFile();
   let envoyees = 0;
 
   for (const fiche of file) {
     try {
-      if (fiche.categorie === 'coursier') {
-        await creerCoursier(fiche.donnees as NouveauCoursier);
-      } else {
-        await creerPartenaire(fiche.donnees as NouveauPartenaire);
-      }
+      await creerPersonne(fiche.donnees);
       retirer(fiche.idLocal);
       envoyees++;
     } catch {
-      // On s'arrête à la première erreur (réseau coupé à nouveau) :
-      // les fiches restantes seront réessayées plus tard.
+      // On s'arrete a la premiere erreur (reseau coupe a nouveau) :
+      // les fiches restantes seront reessayees plus tard.
       break;
     }
   }

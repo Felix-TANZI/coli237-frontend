@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { seDeconnecter } from '../api/auth';
-import { SelecteurLangue } from './SelecteurLangue';
+import { useTranslation } from "react-i18next";
+import { NavLink, useNavigate } from "react-router-dom";
+import { seDeconnecter } from "../api/auth";
+import { SelecteurLangue } from "./SelecteurLangue";
 
 const ONGLETS = [
-  { to: '/tableau-de-bord', cle: 'apercu', icone: 'ti-layout-dashboard' },
-  { to: '/coursiers', cle: 'coursiers', icone: 'ti-motorbike' },
-  { to: '/partenaires', cle: 'partenaires', icone: 'ti-building-store' },
-  { to: '/agents', cle: 'agents', icone: 'ti-users' },
-  { to: '/export', cle: 'export', icone: 'ti-download' },
+  { to: "/tableau-de-bord", cle: "apercu", icone: "ti-layout-dashboard" },
+  { to: "/coursiers", cle: "coursiers", icone: "ti-motorbike" },
+  { to: "/partenaires", cle: "partenaires", icone: "ti-building-store" },
+  { to: "/agents", cle: "agents", icone: "ti-users" },
+  { to: "/export", cle: "export", icone: "ti-download" },
 ];
 
 export function BarreNav() {
@@ -17,7 +17,7 @@ export function BarreNav() {
 
   const deconnexion = () => {
     seDeconnecter();
-    navigate('/connexion');
+    navigate("/connexion");
   };
 
   return (
@@ -40,8 +40,8 @@ export function BarreNav() {
             className={({ isActive }) =>
               `flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition ${
                 isActive
-                  ? 'bg-coli-vert text-white'
-                  : 'text-white/55 hover:text-white hover:bg-white/5'
+                  ? "bg-coli-vert text-white"
+                  : "text-white/55 hover:text-white hover:bg-white/5"
               }`
             }
           >
@@ -55,7 +55,7 @@ export function BarreNav() {
         <SelecteurLangue clair />
         <button
           onClick={deconnexion}
-          aria-label={t('nav.deconnexion')}
+          aria-label={t("nav.deconnexion")}
           className="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition"
         >
           <i className="ti ti-logout text-base" />
@@ -76,7 +76,7 @@ export function BarreNavMobile() {
           to={o.to}
           className={({ isActive }) =>
             `flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] font-medium transition ${
-              isActive ? 'text-coli-vert' : 'text-gray-400'
+              isActive ? "text-coli-vert" : "text-gray-400"
             }`
           }
         >

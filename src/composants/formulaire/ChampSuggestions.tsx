@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 // Champ texte avec liste de suggestions, tout en autorisant la saisie libre.
 export function ChampSuggestions({
@@ -36,7 +36,9 @@ export function ChampSuggestions({
       </label>
       <div className="relative">
         {icone && (
-          <i className={`ti ${icone} absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg`} />
+          <i
+            className={`ti ${icone} absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg`}
+          />
         )}
         <input
           value={valeur}
@@ -48,7 +50,7 @@ export function ChampSuggestions({
           onBlur={() => setTimeout(() => setOuvert(false), 150)}
           placeholder={placeholder}
           required={requis}
-          className={`w-full ${icone ? 'pl-11' : 'pl-4'} pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 outline-none transition text-sm bg-white`}
+          className={`w-full ${icone ? "pl-11" : "pl-4"} pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 outline-none transition text-sm bg-white`}
         />
       </div>
 

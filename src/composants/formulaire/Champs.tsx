@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 // Champ texte avec validation visuelle (coche verte / message d'erreur).
 export function ChampTexte({
@@ -7,7 +7,7 @@ export function ChampTexte({
   onChange,
   placeholder,
   icone,
-  type = 'text',
+  type = "text",
   requis = false,
   aide,
   valide,
@@ -26,7 +26,7 @@ export function ChampTexte({
   messageErreur?: string;
   maxLength?: number;
 }) {
-  const aSaisi = valeur.trim() !== '';
+  const aSaisi = valeur.trim() !== "";
   const montrerCoche = aSaisi && valide === true;
   const montrerErreur = aSaisi && valide === false;
 
@@ -38,7 +38,9 @@ export function ChampTexte({
       </label>
       <div className="relative">
         {icone && (
-          <i className={`ti ${icone} absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg`} />
+          <i
+            className={`ti ${icone} absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg`}
+          />
         )}
         <input
           type={type}
@@ -47,12 +49,12 @@ export function ChampTexte({
           placeholder={placeholder}
           required={requis}
           maxLength={maxLength}
-          className={`w-full ${icone ? 'pl-11' : 'pl-4'} ${montrerCoche || montrerErreur ? 'pr-10' : 'pr-4'} py-3 rounded-xl border-2 outline-none transition text-sm bg-white ${
+          className={`w-full ${icone ? "pl-11" : "pl-4"} ${montrerCoche || montrerErreur ? "pr-10" : "pr-4"} py-3 rounded-xl border-2 outline-none transition text-sm bg-white ${
             montrerErreur
-              ? 'border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100'
+              ? "border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100"
               : montrerCoche
-                ? 'border-coli-vert focus:ring-4 focus:ring-emerald-100'
-                : 'border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10'
+                ? "border-coli-vert focus:ring-4 focus:ring-emerald-100"
+                : "border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10"
           }`}
         />
         {montrerCoche && (
@@ -109,14 +111,18 @@ export function ChampChoix({
               onClick={() => onChange(o.valeur)}
               className={`border-2 rounded-xl py-3 px-2 text-center transition ${
                 actif
-                  ? 'border-coli-vert bg-emerald-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
+                  ? "border-coli-vert bg-emerald-50"
+                  : "border-gray-200 bg-white hover:border-gray-300"
               }`}
             >
               {o.icone && (
-                <i className={`ti ${o.icone} text-xl ${actif ? 'text-coli-vert' : 'text-gray-500'}`} />
+                <i
+                  className={`ti ${o.icone} text-xl ${actif ? "text-coli-vert" : "text-gray-500"}`}
+                />
               )}
-              <div className={`text-[11px] mt-1 ${actif ? 'text-coli-vert font-medium' : 'text-gray-600'}`}>
+              <div
+                className={`text-[11px] mt-1 ${actif ? "text-coli-vert font-medium" : "text-gray-600"}`}
+              >
                 {o.libelle}
               </div>
             </button>
@@ -145,7 +151,7 @@ export function ChampBascule({
     >
       <span className="text-sm text-gray-700">{label}</span>
       <span
-        className={`w-11 h-6 rounded-full flex items-center transition ${valeur ? 'bg-coli-vert justify-end' : 'bg-gray-300 justify-start'} px-0.5`}
+        className={`w-11 h-6 rounded-full flex items-center transition ${valeur ? "bg-coli-vert justify-end" : "bg-gray-300 justify-start"} px-0.5`}
       >
         <span className="w-5 h-5 rounded-full bg-white shadow" />
       </span>
@@ -174,11 +180,15 @@ export function BlocEtape({
           <i className={`ti ${icone} text-lg`} />
         </div>
         <div>
-          <div className="text-[15px] font-semibold text-coli-encre">{titre}</div>
+          <div className="text-[15px] font-semibold text-coli-encre">
+            {titre}
+          </div>
           <div className="text-[11px] text-gray-400">{sousTitre}</div>
         </div>
         {numero && (
-          <span className="ml-auto text-xs text-gray-300 font-mono">{numero}</span>
+          <span className="ml-auto text-xs text-gray-300 font-mono">
+            {numero}
+          </span>
         )}
       </div>
       {children}

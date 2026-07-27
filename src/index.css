@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --color-coli-orange: #f28c28;
@@ -11,7 +11,11 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
   color: var(--color-coli-encre);
 }
 

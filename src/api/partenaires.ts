@@ -1,4 +1,4 @@
-import { api } from './client';
+import { api } from "./client";
 
 export interface Partenaire {
   id: string;
@@ -22,7 +22,7 @@ export interface Partenaire {
 }
 
 export async function listerPartenaires(): Promise<Partenaire[]> {
-  const { data } = await api.get<Partenaire[]>('/partenaires');
+  const { data } = await api.get<Partenaire[]>("/partenaires");
   return data;
 }
 
