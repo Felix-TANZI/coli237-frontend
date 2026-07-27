@@ -8,6 +8,7 @@ const ONGLETS = [
   { to: '/coursiers', cle: 'coursiers', icone: 'ti-motorbike' },
   { to: '/partenaires', cle: 'partenaires', icone: 'ti-building-store' },
   { to: '/agents', cle: 'agents', icone: 'ti-users' },
+  { to: '/export', cle: 'export', icone: 'ti-download' },
 ];
 
 export function BarreNav() {
