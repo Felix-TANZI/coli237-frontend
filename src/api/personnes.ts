@@ -98,3 +98,28 @@ export async function modifierPersonne(
   const { data } = await api.patch<Personne>(`/personnes/${id}`, donnees);
   return data;
 }
+
+// Types de documents possibles pour un livreur.
+export const TYPES_DOCUMENT = [
+  { valeur: 'CNI', libelle: 'CNI' },
+  { valeur: 'PERMIS', libelle: 'Permis' },
+  { valeur: 'CARTE_GRISE', libelle: 'Carte grise' },
+  { valeur: 'ASSURANCE', libelle: 'Assurance' },
+  { valeur: 'PHOTO_IDENTITE', libelle: "Photo d'identite" },
+  { valeur: 'AUTRE', libelle: 'Autre' },
+] as const;
+
+// Envoie un document (fichier) pour une personne.
+export async function ajouterDocument(
+  personneId: string,
+  type: string,
+  fichier: File,
+): Promise<{ id: string; type: string; chemin: string }> {
+  const form = new FormData();
+  form.append('type', type);
+  form.append('fichier', fichier);
+  const { data } = await api.post(`/personnes/${personneId}/documents`, form, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return data as { id: string; type: string; chemin: string };
+}

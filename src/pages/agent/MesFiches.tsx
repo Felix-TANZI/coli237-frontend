@@ -5,6 +5,7 @@ import { modifierPersonne } from '../../api/personnes';
 import { NavAgentBas, NavAgentHaut } from '../../composants/NavAgent';
 import { agentConnecte } from '../../api/auth';
 import { LISTE_ROLES, ROLES } from '../../composants/roles';
+import { GestionDocuments } from '../../composants/GestionDocuments';
 
 function couleurAvatar(nom: string): string {
   const c = ['#1FB89E', '#F28C28', '#17A2B8', '#7F77DD', '#D4537E'];
@@ -348,11 +349,11 @@ function ModaleEdition({ fiche, onFermer }: { fiche: MaFiche; onFermer: () => vo
       onClick={onFermer}
     >
       <div
-        className="bg-white rounded-2xl w-full max-w-md"
+        className="bg-white rounded-2xl w-full max-w-md my-8 max-h-[85vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
         style={{ boxShadow: '0 20px 60px rgba(14,26,36,.25)' }}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 sticky top-0 bg-white">
           <div className="font-bold text-coli-encre">Modifier la fiche</div>
           <button
             onClick={onFermer}
@@ -369,8 +370,18 @@ function ModaleEdition({ fiche, onFermer }: { fiche: MaFiche; onFermer: () => vo
           <ChampMini label="Telephone" valeur={telephone} onChange={setTelephone} />
           <ChampMini label="Email" valeur={email} onChange={setEmail} type="email" />
           {estLivreurAgence && <ChampMini label="Plaque" valeur={plaque} onChange={setPlaque} />}
+
+          {fiche.role === 'LIVREUR_INDEPENDANT' && (
+            <div className="pt-2 border-t border-gray-100">
+              <label className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1.5">
+                <i className="ti ti-files text-coli-vert" />
+                Documents coursier
+              </label>
+              <GestionDocuments personneId={fiche.id} documents={fiche.documents} />
+            </div>
+          )}
         </div>
-        <div className="flex gap-2.5 px-5 py-4 border-t border-gray-100">
+        <div className="flex gap-2.5 px-5 py-4 border-t border-gray-100 sticky bottom-0 bg-white">
           <button
             onClick={onFermer}
             className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition"

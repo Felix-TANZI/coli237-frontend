@@ -90,6 +90,7 @@ export interface MaFiche {
   plaque?: string | null;
   compagnie?: { id: string; nom: string } | null;
   statutChauffeur?: string | null;
+  documents?: { id: string; type: string; chemin: string }[];
   lieu: string;
   statut: string;
   date: string;
@@ -117,6 +118,7 @@ export async function mesFiches(): Promise<MaFiche[]> {
       plaque: p.plaque,
       compagnie: p.compagnie,
       statutChauffeur: p.statutChauffeur,
+      documents: p.documents,
       lieu: p.ville ?? '—',
       statut: p.statut,
       date: p.createdAt,

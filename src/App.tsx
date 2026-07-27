@@ -1,9 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Agents } from "./pages/Agents";
 import { Connexion } from "./pages/Connexion";
-import { Coursiers } from "./pages/Coursiers";
 import { Export } from "./pages/Export";
-import { Partenaires } from "./pages/Partenaires";
 import { TableauDeBord } from "./pages/TableauDeBord";
 import { AccueilAgent } from "./pages/agent/AccueilAgent";
 import { Recenser } from "./pages/agent/Recenser";
@@ -18,8 +16,6 @@ function App() {
 
       {/* Espace admin */}
       <Route path="/tableau-de-bord" element={<TableauDeBord />} />
-      <Route path="/coursiers" element={<Coursiers />} />
-      <Route path="/partenaires" element={<Partenaires />} />
       <Route path="/agents" element={<Agents />} />
       <Route path="/export" element={<Export />} />
       <Route path="/compagnies" element={<Compagnies />} />
