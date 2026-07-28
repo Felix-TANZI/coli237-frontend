@@ -2,7 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { listerCompagnies } from '../../api/compagnies';
 import { creerPersonne, type NouvellePersonne, type RolePersonne } from '../../api/personnes';
+import { ChampTelephone } from '../../composants/formulaire/ChampTelephone';
+import { ChampValide } from '../../composants/formulaire/ChampValide';
 import { LISTE_ROLES, ROLES } from '../../composants/roles';
+import { SelecteurCompagnie } from '../../composants/SelecteurCompagnie';
 
 const OMBRE = '0 1px 3px rgba(14,26,36,.04), 0 4px 16px rgba(14,26,36,.06)';
 
@@ -31,6 +34,9 @@ const INITIAL: Etat = {
   plaque: '',
   compagnieId: '',
 };
+
+const nomOk = (v: string) => v.trim().length >= 2;
+const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
   const qc = useQueryClient();
@@ -68,9 +74,7 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
   });
 
   const identiteOk =
-    etat.prenom.trim().length >= 2 &&
-    etat.nom.trim().length >= 2 &&
-    etat.telephone.replace(/\s/g, '').length >= 8;
+    nomOk(etat.prenom) && nomOk(etat.nom) && etat.telephone.replace(/\D/g, '').length >= 8;
   const vehiculeOk = etat.role !== 'LIVREUR_AGENCE' || etat.typeVehicule !== '';
   const agenceOk = etat.role !== 'LIVREUR_AGENCE' || etat.compagnieId !== '';
   const peutCreer = identiteOk && vehiculeOk && agenceOk;
@@ -125,26 +129,35 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
           {/* Identite */}
           <SousTitre icone="ti-user" texte="Identite" />
           <div className="grid grid-cols-2 gap-3">
-            <Champ label="Prenom" valeur={etat.prenom} onChange={(v) => set('prenom', v)} requis />
-            <Champ label="Nom" valeur={etat.nom} onChange={(v) => set('nom', v)} requis />
+            <ChampValide
+              label="Prenom"
+              valeur={etat.prenom}
+              onChange={(v) => set('prenom', v)}
+              valide={nomOk}
+              requis
+            />
+            <ChampValide
+              label="Nom"
+              valeur={etat.nom}
+              onChange={(v) => set('nom', v)}
+              valide={nomOk}
+              requis
+            />
           </div>
-          <div className="mb-4">
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-              Telephone <span className="text-coli-orange">*</span>
-            </label>
-            <div className="flex gap-2">
-              <div className="flex items-center gap-1.5 px-3 rounded-xl border-2 border-gray-200 bg-white text-sm shrink-0">
-                <span className="text-gray-600 font-medium">+237</span>
-              </div>
-              <input
-                value={etat.telephone}
-                onChange={(e) => set('telephone', e.target.value)}
-                placeholder="6 90 12 34 56"
-                className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 outline-none text-sm"
-              />
-            </div>
-          </div>
-          <Champ label="Email (optionnel)" valeur={etat.email} onChange={(v) => set('email', v)} type="email" />
+          <ChampTelephone
+            label="Telephone"
+            valeur={etat.telephone}
+            onChange={(v) => set('telephone', v)}
+            requis
+          />
+          <ChampValide
+            label="Email (optionnel)"
+            valeur={etat.email}
+            onChange={(v) => set('email', v)}
+            type="email"
+            optionnel
+            valide={emailOk}
+          />
 
           {/* Vehicule + rattachement (livreur agence) */}
           {etat.role === 'LIVREUR_AGENCE' && (
@@ -171,31 +184,36 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
                 </div>
               </div>
               {etat.typeVehicule === 'AUTRE' && (
-                <Champ label="Preciser le type" valeur={etat.typeVehiculeAutre} onChange={(v) => set('typeVehiculeAutre', v)} placeholder="Ex : Velo cargo" />
+                <ChampValide
+                  label="Preciser le type"
+                  valeur={etat.typeVehiculeAutre}
+                  onChange={(v) => set('typeVehiculeAutre', v)}
+                  valide={(v) => v.trim().length >= 2}
+                  placeholder="Ex : Velo cargo"
+                />
               )}
-              <Champ label="Plaque" valeur={etat.plaque} onChange={(v) => set('plaque', v)} placeholder="CE 123 AB" />
+              <ChampValide
+                label="Plaque"
+                valeur={etat.plaque}
+                onChange={(v) => set('plaque', v)}
+                valide={(v) => v.trim().length >= 4}
+                optionnel
+                placeholder="CE 123 AB"
+              />
 
               <SousTitre icone="ti-building-store" texte="Rattachement" />
               <div className="mb-1">
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">
                   Compagnie <span className="text-coli-orange">*</span>
                 </label>
-                <div className="relative">
-                  <select
-                    value={etat.compagnieId}
-                    onChange={(e) => set('compagnieId', e.target.value)}
-                    className="w-full px-4 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan outline-none text-sm bg-white appearance-none cursor-pointer"
-                  >
-                    <option value="">Selectionner une compagnie</option>
-                    {compagnies.map((c) => (
-                      <option key={c.id} value={c.id}>{c.nom}</option>
-                    ))}
-                  </select>
-                  <i className="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                </div>
+                <SelecteurCompagnie
+                  compagnies={compagnies}
+                  valeur={etat.compagnieId}
+                  onChange={(id) => set('compagnieId', id)}
+                />
                 {compagnies.length === 0 && (
                   <p className="text-[11px] text-coli-orange mt-1">
-                    Aucune compagnie. Creez-en une d'abord dans l'onglet Compagnies.
+                    Aucune compagnie. Utilisez le bouton + pour en creer une.
                   </p>
                 )}
               </div>
@@ -245,44 +263,11 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
   );
 }
 
-// --- Sous-composants ---
 function SousTitre({ icone, texte }: { icone: string; texte: string }) {
   return (
     <div className="flex items-center gap-2 mt-5 mb-3">
       <i className={`ti ${icone} text-coli-vert`} />
       <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{texte}</span>
-    </div>
-  );
-}
-
-function Champ({
-  label,
-  valeur,
-  onChange,
-  type = 'text',
-  placeholder,
-  requis,
-}: {
-  label: string;
-  valeur: string;
-  onChange: (v: string) => void;
-  type?: string;
-  placeholder?: string;
-  requis?: boolean;
-}) {
-  return (
-    <div className="mb-4">
-      <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-        {label}
-        {requis && <span className="text-coli-orange ml-0.5">*</span>}
-      </label>
-      <input
-        type={type}
-        value={valeur}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 outline-none text-sm"
-      />
     </div>
   );
 }
