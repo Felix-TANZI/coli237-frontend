@@ -324,6 +324,16 @@
     "deconnexion": "Se déconnecter",
     "deconnexionConfirme": "Voulez-vous vraiment vous déconnecter ?",
     "annuler": "Annuler",
-    "confirmer": "Se déconnecter"
+    "confirmer": "Se déconnecter",
+    "securite": "Sécurité",
+    "changerMdp": "Changer le mot de passe",
+    "ancienMdp": "Ancien mot de passe",
+    "nouveauMdp": "Nouveau mot de passe",
+    "confirmerMdp": "Confirmer",
+    "mdpMin": "Au moins 6 caractères",
+    "mdpDifferent": "Les mots de passe ne correspondent pas",
+    "mdpErreur": "Ancien mot de passe incorrect",
+    "valider": "Valider",
+    "mdpChange": "Mot de passe modifié"
   }
 }

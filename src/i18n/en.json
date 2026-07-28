@@ -322,6 +322,16 @@
     "deconnexion": "Sign out",
     "deconnexionConfirme": "Are you sure you want to sign out?",
     "annuler": "Cancel",
-    "confirmer": "Sign out"
+    "confirmer": "Sign out",
+    "securite": "Security",
+    "changerMdp": "Change password",
+    "ancienMdp": "Current password",
+    "nouveauMdp": "New password",
+    "confirmerMdp": "Confirm",
+    "mdpMin": "At least 6 characters",
+    "mdpDifferent": "Passwords do not match",
+    "mdpErreur": "Current password is incorrect",
+    "valider": "Confirm",
+    "mdpChange": "Password changed"
   }
 }

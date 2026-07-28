@@ -62,3 +62,14 @@ export function agentConnecte() {
     localStorage.getItem("coli_agent") ?? sessionStorage.getItem("coli_agent");
   return brut ? JSON.parse(brut) : null;
 }
+
+// Change le mot de passe de l'agent connecte.
+export async function changerMotDePasse(
+  ancienMotDePasse: string,
+  nouveauMotDePasse: string,
+): Promise<void> {
+  await api.post('/auth/changer-mot-de-passe', {
+    ancienMotDePasse,
+    nouveauMotDePasse,
+  });
+}

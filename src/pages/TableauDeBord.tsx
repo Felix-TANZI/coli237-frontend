@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { chargerTableau } from '../api/tableau';
 import { BarreNav, BarreNavMobile } from '../composants/BarreNav';
 import { RepartitionVehicule } from '../composants/RepartitionVehicule';
@@ -79,9 +80,12 @@ export function TableauDeBord() {
             <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
               <div className="flex items-center justify-between mb-1">
                 <h2 className="font-semibold text-sm text-coli-encre">{t('tableau.recents')}</h2>
-                <span className="text-xs text-coli-cyan font-medium cursor-pointer">
+                <Link
+                  to="/utilisateurs"
+                  className="text-xs text-coli-cyan font-medium hover:underline"
+                >
                   {t('tableau.toutVoir')}
-                </span>
+                </Link>
               </div>
 
               {isLoading && (
