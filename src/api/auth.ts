@@ -29,6 +29,27 @@ export async function seConnecter(
   return data;
 }
 
+// Inscription libre d'un agent. Connecte directement apres creation.
+export async function sinscrire(
+  nom: string,
+  email: string,
+  telephone: string,
+  motDePasse: string,
+  seSouvenir = true,
+) {
+  const { data } = await api.post<ReponseConnexion>('/auth/inscription', {
+    nom,
+    email,
+    telephone,
+    motDePasse,
+  });
+
+  const stockage = seSouvenir ? localStorage : sessionStorage;
+  stockage.setItem('coli_jeton', data.jeton);
+  stockage.setItem('coli_agent', JSON.stringify(data.agent));
+  return data;
+}
+
 export function seDeconnecter() {
   localStorage.removeItem("coli_jeton");
   localStorage.removeItem("coli_agent");

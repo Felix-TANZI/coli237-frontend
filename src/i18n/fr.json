@@ -18,7 +18,19 @@
     "bouton": "Se connecter",
     "chargement": "Connexion...",
     "erreur": "Identifiant ou mot de passe incorrect",
-    "aideOubli": "Pour réinitialiser votre mot de passe, contactez votre administrateur."
+    "aideOubli": "Pour réinitialiser votre mot de passe, contactez votre administrateur.",
+    "creerCompte": "Créer un compte",
+    "inscrisToi": "Inscrivez-vous pour commencer à recenser",
+    "nomComplet": "Nom complet",
+    "telephone": "Téléphone",
+    "emailLabel": "Email",
+    "mdpMin": "Au moins 6 caractères",
+    "creerBouton": "Créer mon compte",
+    "creation": "Création...",
+    "dejaCompte": "Déjà un compte ?",
+    "seConnecterLien": "Se connecter",
+    "pasCompte": "Pas encore de compte ?",
+    "emailDejaUtilise": "Cet email ou téléphone est déjà utilisé."
   },
   "carte": {
     "valide": "validé",

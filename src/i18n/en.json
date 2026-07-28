@@ -18,7 +18,19 @@
     "bouton": "Sign in",
     "chargement": "Signing in...",
     "erreur": "Incorrect username or password",
-    "aideOubli": "To reset your password, contact your administrator."
+    "aideOubli": "To reset your password, contact your administrator.",
+    "creerCompte": "Create an account",
+    "inscrisToi": "Sign up to start recording",
+    "nomComplet": "Full name",
+    "telephone": "Phone",
+    "emailLabel": "Email",
+    "mdpMin": "At least 6 characters",
+    "creerBouton": "Create my account",
+    "creation": "Creating...",
+    "dejaCompte": "Already have an account?",
+    "seConnecterLien": "Sign in",
+    "pasCompte": "No account yet?",
+    "emailDejaUtilise": "This email or phone is already in use."
   },
   "carte": {
     "valide": "verified",
