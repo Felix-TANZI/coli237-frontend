@@ -11,6 +11,7 @@ export interface StatsTableau {
   agentsActifs: number;
   parRegion: Record<string, number>;
   parRole: { type: string; nombre: number; pourcent: number }[];
+  classementAgents: { id: string; nom: string; nombre: number }[];
   recents: {
     id: string;
     nom: string;
@@ -23,6 +24,7 @@ export interface StatsTableau {
 
 interface Agent {
   id: string;
+  nom: string;
   statut: string;
 }
 
@@ -64,6 +66,26 @@ export async function chargerTableau(): Promise<StatsTableau> {
     }))
     .sort((a, b) => b.nombre - a.nombre);
 
+  // Classement des agents par nombre de recensements.
+  // On croise avec la liste des agents pour avoir les noms de facon fiable.
+  const nomParAgent: Record<string, string> = {};
+  for (const a of agents) nomParAgent[a.id] = a.nom;
+
+  const compteAgent: Record<string, number> = {};
+  for (const p of personnes) {
+    const idAgent = p.agent?.id;
+    if (!idAgent) continue;
+    compteAgent[idAgent] = (compteAgent[idAgent] ?? 0) + 1;
+  }
+  const classementAgents = Object.entries(compteAgent)
+    .map(([id, nombre]) => ({
+      id,
+      nom: nomParAgent[id] ?? p_agent_nom(personnes, id) ?? 'Agent',
+      nombre,
+    }))
+    .sort((a, b) => b.nombre - a.nombre)
+    .slice(0, 5);
+
   const recents = personnes
     .map((p) => ({
       id: p.id,
@@ -85,6 +107,14 @@ export async function chargerTableau(): Promise<StatsTableau> {
     agentsActifs: agents.filter((a) => a.statut === 'ACTIF').length,
     parRegion,
     parRole,
+    classementAgents,
     recents,
   };
+}
+
+// Repli : recupere le nom de l'agent depuis les personnes, si l'agent
+// n'etait pas dans la liste /agents (ex : agent archive).
+function p_agent_nom(personnes: Personne[], idAgent: string): string | undefined {
+  const p = personnes.find((x) => x.agent?.id === idAgent);
+  return p?.agent?.nom;
 }

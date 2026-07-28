@@ -68,7 +68,8 @@
     "chargement": "Chargement...",
     "total": "Personnes",
     "livreurs": "Livreurs",
-    "etatValidations": "Etat des validations"
+    "etatValidations": "Etat des validations",
+    "classementAgents": "Agents les plus actifs"
   },
   "coursiers": {
     "titre": "Coursiers",

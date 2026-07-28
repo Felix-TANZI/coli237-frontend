@@ -67,7 +67,8 @@
     "chargement": "Loading...",
     "total": "People",
     "livreurs": "Couriers",
-    "etatValidations": "Validation status"
+    "etatValidations": "Validation status",
+    "classementAgents": "Most active agents"
   },
   "coursiers": {
     "titre": "Couriers",

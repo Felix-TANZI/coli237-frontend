@@ -122,29 +122,24 @@ export function TableauDeBord() {
             </div>
           </div>
 
-          {/* Colonne droite : etat des validations + activité agents */}
+          {/* Colonne droite : etat des validations + classement agents */}
           <div className="flex flex-col gap-4 sm:gap-5">
-            {/* Etat des validations (remplace la carte de densite) */}
+            {/* Etat des validations */}
             <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
               <h2 className="font-semibold text-sm text-coli-encre mb-4">
                 {t('tableau.etatValidations')}
               </h2>
 
-              {/* Barre de progression empilee */}
               <div className="flex h-3 rounded-full overflow-hidden mb-4">
                 {parStatut.map((x) => (
                   <div
                     key={x.cle}
-                    style={{
-                      width: `${(x.valeur / totalStatut) * 100}%`,
-                      background: x.couleur,
-                    }}
+                    style={{ width: `${(x.valeur / totalStatut) * 100}%`, background: x.couleur }}
                     title={`${x.label} : ${x.valeur}`}
                   />
                 ))}
               </div>
 
-              {/* Detail par statut */}
               <div className="space-y-3">
                 {parStatut.map((x) => (
                   <div key={x.cle} className="flex items-center gap-3">
@@ -162,21 +157,52 @@ export function TableauDeBord() {
               </div>
             </div>
 
-            {/* Activité agents */}
+            {/* Classement des agents les plus actifs */}
             <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
-              <h2 className="font-semibold text-sm text-coli-encre mb-3">
-                {t('tableau.activiteAgents')}
+              <h2 className="font-semibold text-sm text-coli-encre mb-4">
+                {t('tableau.classementAgents')}
               </h2>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-coli-vert/10 text-coli-vert flex items-center justify-center">
-                  <i className="ti ti-user-shield text-xl" />
-                </div>
-                <div>
-                  <div className="font-extrabold text-2xl text-coli-encre" style={{ fontFamily: 'Sora, Inter' }}>
-                    {data?.agentsActifs ?? 0}
-                  </div>
-                  <div className="text-xs text-gray-400">{t('tableau.agentsActifs')}</div>
-                </div>
+
+              {(!data || data.classementAgents.length === 0) && (
+                <p className="text-xs text-gray-400 py-4 text-center">
+                  {t('tableau.aucuneDonnee')}
+                </p>
+              )}
+
+              <div className="space-y-3">
+                {data?.classementAgents.map((a, i) => {
+                  const max = data.classementAgents[0]?.nombre || 1;
+                  const medailles = ['#F5B14C', '#B8C2CC', '#C88B5A'];
+                  return (
+                    <div key={a.id} className="flex items-center gap-3">
+                      <div
+                        className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
+                        style={{
+                          background: i < 3 ? medailles[i] : '#eceff1',
+                          color: i < 3 ? '#fff' : '#8a99a3',
+                        }}
+                      >
+                        {i + 1}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm text-coli-encre font-medium truncate">
+                            {a.nom}
+                          </span>
+                          <span className="text-xs font-semibold text-gray-500 shrink-0 ml-2">
+                            {a.nombre}
+                          </span>
+                        </div>
+                        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all duration-700"
+                            style={{ width: `${(a.nombre / max) * 100}%`, background: '#1FB89E' }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
