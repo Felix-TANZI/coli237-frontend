@@ -6,6 +6,8 @@ export interface StatsTableau {
   total: number;
   livreurs: number;
   attente: number;
+  valides: number;
+  rejetes: number;
   agentsActifs: number;
   parRegion: Record<string, number>;
   parRole: { type: string; nombre: number; pourcent: number }[];
@@ -35,11 +37,13 @@ export async function chargerTableau(): Promise<StatsTableau> {
   ]);
 
   const attente = personnes.filter((p) => p.statut === 'EN_ATTENTE').length;
+  const valides = personnes.filter((p) => p.statut === 'VALIDE').length;
+  const rejetes = personnes.filter((p) => p.statut === 'REJETE').length;
   const livreurs = personnes.filter(
     (p) => p.role === 'LIVREUR_INDEPENDANT' || p.role === 'LIVREUR_AGENCE',
   ).length;
 
-  // Repartition par ville.
+  // Repartition par ville (conserve pour compatibilite).
   const parRegion: Record<string, number> = {};
   for (const p of personnes) {
     const v = p.ville ?? 'Inconnu';
@@ -65,7 +69,7 @@ export async function chargerTableau(): Promise<StatsTableau> {
       id: p.id,
       nom: `${p.prenom} ${p.nom}`,
       type: libelleRole(p.role),
-      lieu: p.ville ?? '—',
+      lieu: p.ville ?? '-',
       statut: p.statut,
       date: p.createdAt,
     }))
@@ -76,6 +80,8 @@ export async function chargerTableau(): Promise<StatsTableau> {
     total: personnes.length,
     livreurs,
     attente,
+    valides,
+    rejetes,
     agentsActifs: agents.filter((a) => a.statut === 'ACTIF').length,
     parRegion,
     parRole,

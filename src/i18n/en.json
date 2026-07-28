@@ -54,7 +54,8 @@
     "aucuneDonnee": "No data yet",
     "chargement": "Loading...",
     "total": "People",
-    "livreurs": "Couriers"
+    "livreurs": "Couriers",
+    "etatValidations": "Validation status"
   },
   "coursiers": {
     "titre": "Couriers",

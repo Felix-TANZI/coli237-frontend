@@ -1,12 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
-import { chargerTableau } from "../api/tableau";
-import { BarreNav, BarreNavMobile } from "../composants/BarreNav";
-import { CarteDensite } from "../composants/CarteDensite";
-import { RepartitionVehicule } from "../composants/RepartitionVehicule";
+import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import { chargerTableau } from '../api/tableau';
+import { BarreNav, BarreNavMobile } from '../composants/BarreNav';
+import { RepartitionVehicule } from '../composants/RepartitionVehicule';
 
 function couleurAvatar(nom: string): string {
-  const couleurs = ["#1FB89E", "#F28C28", "#17A2B8", "#7F77DD", "#D4537E"];
+  const couleurs = ['#1FB89E', '#F28C28', '#17A2B8', '#7F77DD', '#D4537E'];
   let somme = 0;
   for (const c of nom) somme += c.charCodeAt(0);
   return couleurs[somme % couleurs.length];
@@ -14,28 +13,33 @@ function couleurAvatar(nom: string): string {
 
 function initiales(nom: string): string {
   return nom
-    .split(" ")
+    .split(' ')
     .map((m) => m[0])
     .slice(0, 2)
-    .join("")
+    .join('')
     .toUpperCase();
 }
 
-const STATUT_STYLE: Record<
-  string,
-  { bg: string; texte: string; libelle: string }
-> = {
-  VALIDE: { bg: "#e8f8f3", texte: "#0F6E56", libelle: "Validé" },
-  EN_ATTENTE: { bg: "#fdf0e3", texte: "#985a12", libelle: "En attente" },
-  REJETE: { bg: "#fdeaea", texte: "#a32d2d", libelle: "Rejeté" },
+const STATUT_STYLE: Record<string, { bg: string; texte: string; libelle: string }> = {
+  VALIDE: { bg: '#e8f8f3', texte: '#0F6E56', libelle: 'Valide' },
+  EN_ATTENTE: { bg: '#fdf0e3', texte: '#985a12', libelle: 'En attente' },
+  REJETE: { bg: '#fdeaea', texte: '#a32d2d', libelle: 'Rejete' },
 };
 
 export function TableauDeBord() {
   const { t } = useTranslation();
   const { data, isLoading } = useQuery({
-    queryKey: ["tableau"],
+    queryKey: ['tableau'],
     queryFn: chargerTableau,
   });
+
+  // Repartition par statut, pour le panneau de droite.
+  const parStatut = [
+    { cle: 'VALIDE', label: 'Validees', couleur: '#1FB89E', valeur: data?.valides ?? 0 },
+    { cle: 'EN_ATTENTE', label: 'En attente', couleur: '#F28C28', valeur: data?.attente ?? 0 },
+    { cle: 'REJETE', label: 'Rejetees', couleur: '#E24B4A', valeur: data?.rejetes ?? 0 },
+  ];
+  const totalStatut = parStatut.reduce((s, x) => s + x.valeur, 0) || 1;
 
   return (
     <div className="min-h-screen bg-coli-craie pb-20 md:pb-0">
@@ -43,20 +47,18 @@ export function TableauDeBord() {
 
       <main className="px-4 sm:px-6 py-5 sm:py-6 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-[1fr_360px] gap-4 sm:gap-5 items-start">
-          {/* Colonne gauche : bandeau + vehicules + recents */}
+          {/* Colonne gauche : bandeau + roles + recents */}
           <div className="flex flex-col gap-4 sm:gap-5">
             {/* Bandeau d'accueil */}
             <div
               className="rounded-2xl p-5 sm:p-6 text-white relative overflow-hidden"
-              style={{ background: "linear-gradient(120deg,#0E1A24,#16334a)" }}
+              style={{ background: 'linear-gradient(120deg,#0E1A24,#16334a)' }}
             >
               <div className="relative z-10">
                 <h1 className="font-extrabold text-xl sm:text-2xl tracking-tight">
-                  {t("tableau.titre")}
+                  {t('tableau.titre')}
                 </h1>
-                <p className="text-white/60 text-xs sm:text-sm mt-1">
-                  {t("tableau.sousTitre")}
-                </p>
+                <p className="text-white/60 text-xs sm:text-sm mt-1">{t('tableau.sousTitre')}</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-5">
                   <Metrique valeur={data?.total} label={t('tableau.total')} couleur="#5DCAA5" chargement={isLoading} />
                   <Metrique valeur={data?.livreurs} label={t('tableau.livreurs')} couleur="#F5B87A" chargement={isLoading} />
@@ -66,9 +68,7 @@ export function TableauDeBord() {
               </div>
               <div
                 className="absolute -right-16 -top-16 w-64 h-64 rounded-full opacity-20"
-                style={{
-                  background: "radial-gradient(circle,#1FB89E,transparent 70%)",
-                }}
+                style={{ background: 'radial-gradient(circle,#1FB89E,transparent 70%)' }}
               />
             </div>
 
@@ -78,23 +78,17 @@ export function TableauDeBord() {
             {/* Recensements récents */}
             <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
               <div className="flex items-center justify-between mb-1">
-                <h2 className="font-semibold text-sm text-coli-encre">
-                  {t("tableau.recents")}
-                </h2>
+                <h2 className="font-semibold text-sm text-coli-encre">{t('tableau.recents')}</h2>
                 <span className="text-xs text-coli-cyan font-medium cursor-pointer">
-                  {t("tableau.toutVoir")}
+                  {t('tableau.toutVoir')}
                 </span>
               </div>
 
               {isLoading && (
-                <p className="text-sm text-gray-400 py-6 text-center">
-                  {t("tableau.chargement")}
-                </p>
+                <p className="text-sm text-gray-400 py-6 text-center">{t('tableau.chargement')}</p>
               )}
               {!isLoading && data?.recents.length === 0 && (
-                <p className="text-sm text-gray-400 py-6 text-center">
-                  {t("tableau.aucuneDonnee")}
-                </p>
+                <p className="text-sm text-gray-400 py-6 text-center">{t('tableau.aucuneDonnee')}</p>
               )}
 
               {data?.recents.map((r) => {
@@ -111,9 +105,7 @@ export function TableauDeBord() {
                       {initiales(r.nom)}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-sm font-medium text-coli-encre truncate">
-                        {r.nom}
-                      </div>
+                      <div className="text-sm font-medium text-coli-encre truncate">{r.nom}</div>
                       <div className="text-xs text-gray-400 truncate">
                         {r.type} · {r.lieu}
                       </div>
@@ -130,17 +122,62 @@ export function TableauDeBord() {
             </div>
           </div>
 
-          {/* Colonne droite : carte + activité agents */}
+          {/* Colonne droite : etat des validations + activité agents */}
           <div className="flex flex-col gap-4 sm:gap-5">
-            <CarteDensite parRegion={data?.parRegion ?? {}} />
+            {/* Etat des validations (remplace la carte de densite) */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
+              <h2 className="font-semibold text-sm text-coli-encre mb-4">
+                {t('tableau.etatValidations')}
+              </h2>
 
+              {/* Barre de progression empilee */}
+              <div className="flex h-3 rounded-full overflow-hidden mb-4">
+                {parStatut.map((x) => (
+                  <div
+                    key={x.cle}
+                    style={{
+                      width: `${(x.valeur / totalStatut) * 100}%`,
+                      background: x.couleur,
+                    }}
+                    title={`${x.label} : ${x.valeur}`}
+                  />
+                ))}
+              </div>
+
+              {/* Detail par statut */}
+              <div className="space-y-3">
+                {parStatut.map((x) => (
+                  <div key={x.cle} className="flex items-center gap-3">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      style={{ background: x.couleur }}
+                    />
+                    <span className="text-sm text-gray-600 flex-1">{x.label}</span>
+                    <span className="text-sm font-semibold text-coli-encre">{x.valeur}</span>
+                    <span className="text-xs text-gray-400 w-10 text-right">
+                      {Math.round((x.valeur / totalStatut) * 100)}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Activité agents */}
             <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
               <h2 className="font-semibold text-sm text-coli-encre mb-3">
-                {t("tableau.activiteAgents")}
+                {t('tableau.activiteAgents')}
               </h2>
-              <p className="text-xs text-gray-400 py-4 text-center">
-                {t("tableau.chargement")}
-              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-coli-vert/10 text-coli-vert flex items-center justify-center">
+                  <i className="ti ti-user-shield text-xl" />
+                </div>
+                <div>
+                  <div className="font-extrabold text-2xl text-coli-encre" style={{ fontFamily: 'Sora, Inter' }}>
+                    {data?.agentsActifs ?? 0}
+                  </div>
+                  <div className="text-xs text-gray-400">{t('tableau.agentsActifs')}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -166,9 +203,9 @@ function Metrique({
     <div>
       <div
         className="font-extrabold text-2xl sm:text-3xl leading-none"
-        style={{ color: couleur, fontFamily: "Sora, Inter, sans-serif" }}
+        style={{ color: couleur, fontFamily: 'Sora, Inter, sans-serif' }}
       >
-        {chargement ? "·" : (valeur ?? 0)}
+        {chargement ? '·' : (valeur ?? 0)}
       </div>
       <div className="text-[11px] sm:text-xs text-white/60 mt-1">{label}</div>
     </div>

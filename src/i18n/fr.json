@@ -55,7 +55,8 @@
     "aucuneDonnee": "Aucune donnée pour le moment",
     "chargement": "Chargement...",
     "total": "Personnes",
-    "livreurs": "Livreurs"
+    "livreurs": "Livreurs",
+    "etatValidations": "Etat des validations"
   },
   "coursiers": {
     "titre": "Coursiers",
