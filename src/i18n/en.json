@@ -32,8 +32,7 @@
     "export": "Export",
     "deconnexion": "Sign out",
     "utilisateurs": "Users",
-    "compagnies": "Companies",
-    "navCompagnies": "Companies"
+    "compagnies": "Companies"
   },
   "tableau": {
     "titre": "National census",
@@ -200,7 +199,8 @@
     "partenaireLivraison": "Delivery partner",
     "monRythme": "My pace",
     "septJours": "7 days",
-    "objectifJour": "Daily goal"
+    "objectifJour": "Daily goal",
+    "navCompagnies": "Companies"
   },
   "recensement": {
     "retour": "Back",

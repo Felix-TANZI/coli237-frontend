@@ -148,7 +148,8 @@
     "copier": "Copier",
     "copie": "Copié",
     "fermer": "Fermer",
-    "sur": "sur"
+    "sur": "sur",
+    "navCompagnies": "Compagnies"
   },
   "export": {
     "titre": "Export des données",
@@ -200,7 +201,8 @@
     "partenaireLivraison": "Partenaire de livraison",
     "monRythme": "Mon rythme",
     "septJours": "7 jours",
-    "objectifJour": "Objectif du jour"
+    "objectifJour": "Objectif du jour",
+    "navCompagnies": "Compagnies"
   },
   "recensement": {
     "retour": "Retour",

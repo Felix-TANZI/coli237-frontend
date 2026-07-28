@@ -1,27 +1,28 @@
-import { useTranslation } from "react-i18next";
-import { NavLink, useNavigate } from "react-router-dom";
-import { seDeconnecter } from "../api/auth";
-import { SelecteurLangue } from "./SelecteurLangue";
+import { useTranslation } from 'react-i18next';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { seDeconnecter } from '../api/auth';
+import { SelecteurLangue } from './SelecteurLangue';
 
 const ONGLETS = [
-  { to: "/agent", cle: "navAccueil", icone: "ti-home", exact: true },
-  { to: "/agent/fiches", cle: "navFiches", icone: "ti-list", exact: false },
-  { to: "/agent/recenser", cle: "navRecenser", icone: "ti-plus", exact: false },
-  { to: "/agent/profil", cle: "navProfil", icone: "ti-user", exact: false },
+  { to: '/agent', cle: 'navAccueil', icone: 'ti-home', exact: true },
+  { to: '/agent/fiches', cle: 'navFiches', icone: 'ti-list', exact: false },
+  { to: '/agent/recenser', cle: 'navRecenser', icone: 'ti-plus', exact: false },
+  { to: '/agent/compagnies', cle: 'navCompagnies', icone: 'ti-building-store', exact: false },
+  { to: '/agent/profil', cle: 'navProfil', icone: 'ti-user', exact: false },
 ];
 
 function couleurAvatar(nom: string): string {
-  const c = ["#1FB89E", "#F28C28", "#17A2B8", "#7F77DD", "#D4537E"];
+  const c = ['#1FB89E', '#F28C28', '#17A2B8', '#7F77DD', '#D4537E'];
   let s = 0;
   for (const ch of nom) s += ch.charCodeAt(0);
   return c[s % c.length];
 }
 function initiales(nom: string): string {
   return nom
-    .split(" ")
+    .split(' ')
     .map((m) => m[0])
     .slice(0, 2)
-    .join("")
+    .join('')
     .toUpperCase();
 }
 
@@ -32,7 +33,7 @@ export function NavAgentHaut({ nom }: { nom: string }) {
 
   const deconnexion = () => {
     seDeconnecter();
-    navigate("/connexion");
+    navigate('/connexion');
   };
 
   return (
@@ -53,8 +54,8 @@ export function NavAgentHaut({ nom }: { nom: string }) {
             className={({ isActive }) =>
               `flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition ${
                 isActive
-                  ? "bg-coli-vert text-white"
-                  : "text-white/55 hover:text-white hover:bg-white/5"
+                  ? 'bg-coli-vert text-white'
+                  : 'text-white/55 hover:text-white hover:bg-white/5'
               }`
             }
           >
@@ -74,7 +75,7 @@ export function NavAgentHaut({ nom }: { nom: string }) {
         </div>
         <button
           onClick={deconnexion}
-          aria-label={t("agent.deconnexion")}
+          aria-label={t('agent.deconnexion')}
           className="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition"
         >
           <i className="ti ti-logout text-base" />
@@ -87,17 +88,16 @@ export function NavAgentHaut({ nom }: { nom: string }) {
 // Barre du bas, visible seulement sur mobile (moins de md).
 export function NavAgentBas() {
   const { t } = useTranslation();
-
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 flex justify-around py-2 pb-3 z-40">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 flex justify-around py-2 z-40">
       {ONGLETS.map((o) => (
         <NavLink
           key={o.to}
           to={o.to}
           end={o.exact}
           className={({ isActive }) =>
-            `flex flex-col items-center gap-0.5 px-3 text-[10px] font-medium transition ${
-              isActive ? "text-coli-vert" : "text-gray-400"
+            `flex flex-col items-center gap-0.5 px-2 py-1 text-[10px] font-medium transition ${
+              isActive ? 'text-coli-vert' : 'text-gray-400'
             }`
           }
         >

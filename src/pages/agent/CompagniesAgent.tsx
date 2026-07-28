@@ -1,10 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import {
-  archiverCompagnie,
-  creerCompagnie,
-  listerCompagnies,
-} from '../../api/compagnies';
+import { archiverCompagnie, creerCompagnie, listerCompagnies } from '../../api/compagnies';
 import { listerPersonnes } from '../../api/personnes';
 import { NavAgentBas, NavAgentHaut } from '../../composants/NavAgent';
 import { agentConnecte } from '../../api/auth';
@@ -52,7 +48,7 @@ export function CompagniesAgent() {
     <div className="min-h-screen bg-coli-craie pb-24 md:pb-0">
       <NavAgentHaut nom={moi?.nom ?? 'Agent'} />
 
-      <div className="max-w-4xl mx-auto px-4 py-5 md:px-6 md:py-6">
+      <div className="max-w-5xl mx-auto px-4 py-5 md:px-6 md:py-6">
         {/* En-tete */}
         <div className="flex items-start justify-between mb-5">
           <div>
@@ -79,7 +75,7 @@ export function CompagniesAgent() {
 
         {/* Recherche */}
         <div
-          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 mb-5"
+          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 mb-5 md:w-96"
           style={{ boxShadow: OMBRE }}
         >
           <i className="ti ti-search text-gray-400" />
@@ -91,21 +87,73 @@ export function CompagniesAgent() {
           />
         </div>
 
-        {/* Liste */}
-        {isLoading && <p className="text-sm text-gray-400 py-8 text-center">...</p>}
-        {!isLoading && filtrees.length === 0 && (
-          <div
-            className="bg-white rounded-2xl border border-gray-200/70 p-8 text-center"
-            style={{ boxShadow: OMBRE }}
-          >
-            <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3">
-              <i className="ti ti-building-store text-2xl" />
-            </div>
-            <p className="text-sm text-gray-500">Aucune compagnie</p>
+        {/* Tableau desktop */}
+        <div
+          className="hidden md:block bg-white rounded-2xl border border-gray-200/70 overflow-hidden"
+          style={{ boxShadow: OMBRE }}
+        >
+          <div className="grid grid-cols-[2fr_1.6fr_1fr_1fr_auto] gap-3 px-5 py-3 bg-gray-50/70 border-b border-gray-100 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
+            <div>Compagnie</div>
+            <div>Admin</div>
+            <div>Statut</div>
+            <div>Personnes</div>
+            <div></div>
           </div>
-        )}
+          {isLoading && <div className="px-5 py-8 text-center text-gray-400 text-sm">...</div>}
+          {!isLoading && filtrees.length === 0 && (
+            <div className="px-5 py-10 text-center text-gray-400 text-sm">Aucune compagnie</div>
+          )}
+          {filtrees.map((c) => (
+            <div
+              key={c.id}
+              className="grid grid-cols-[2fr_1.6fr_1fr_1fr_auto] gap-3 px-5 py-3 border-b border-gray-50 last:border-none items-center hover:bg-gray-50/50 transition"
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-semibold text-white shrink-0"
+                  style={{ background: couleurAvatar(c.nom) }}
+                >
+                  {initiales(c.nom)}
+                </div>
+                <div className="text-sm font-semibold text-coli-encre truncate">{c.nom}</div>
+              </div>
+              <div className="text-sm text-gray-600 truncate">
+                {c.admin ? `${c.admin.prenom} ${c.admin.nom}` : '-'}
+              </div>
+              <div>
+                <span
+                  className="text-[11px] font-semibold px-2.5 py-1 rounded-full inline-flex items-center gap-1"
+                  style={
+                    c.statut === 'ACTIVE'
+                      ? { background: '#e8f8f3', color: '#0F6E56' }
+                      : { background: '#f2f5f7', color: '#8a99a3' }
+                  }
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ background: c.statut === 'ACTIVE' ? '#1FB89E' : '#b0bcc4' }}
+                  />
+                  {c.statut === 'ACTIVE' ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+              <div className="text-sm text-gray-600">{c._count?.personnes ?? 0}</div>
+              <button
+                onClick={() => archiver.mutate(c.id)}
+                className="w-8 h-8 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition"
+                aria-label="Archiver"
+              >
+                <i className="ti ti-trash" />
+              </button>
+            </div>
+          ))}
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* Cartes mobile */}
+        <div className="md:hidden space-y-2.5">
+          {isLoading && <p className="text-sm text-gray-400 py-8 text-center">...</p>}
+          {!isLoading && filtrees.length === 0 && (
+            <p className="text-sm text-gray-400 py-8 text-center">Aucune compagnie</p>
+          )}
           {filtrees.map((c) => (
             <div
               key={c.id}
@@ -114,14 +162,14 @@ export function CompagniesAgent() {
             >
               <div className="flex items-center gap-3">
                 <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center text-sm font-semibold text-white shrink-0"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold text-white shrink-0"
                   style={{ background: couleurAvatar(c.nom) }}
                 >
                   {initiales(c.nom)}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold text-coli-encre truncate">{c.nom}</div>
-                  <div className="text-[11px] text-gray-400">
+                  <div className="text-[11px] text-gray-400 truncate">
                     {c.admin ? `Admin : ${c.admin.prenom} ${c.admin.nom}` : 'Sans admin'}
                   </div>
                 </div>
@@ -246,7 +294,7 @@ function ModaleCompagnie({ onFermer }: { onFermer: () => void }) {
             </div>
             {admins.length === 0 && (
               <p className="text-[11px] text-gray-400 mt-1">
-                Aucun admin compagnie recense. Recensez-en un d'abord si besoin.
+                Aucun admin compagnie recense pour l'instant.
               </p>
             )}
           </div>
