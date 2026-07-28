@@ -30,7 +30,10 @@
     "partenaires": "Partners",
     "agents": "Agents",
     "export": "Export",
-    "deconnexion": "Sign out"
+    "deconnexion": "Sign out",
+    "utilisateurs": "Users",
+    "compagnies": "Companies",
+    "navCompagnies": "Companies"
   },
   "tableau": {
     "titre": "National census",

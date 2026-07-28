@@ -36,9 +36,9 @@ function formaterTel(tel: string): string {
 function sousTitre(p: Personne): string {
   if (p.role === 'LIVREUR_INDEPENDANT' || p.role === 'LIVREUR_AGENCE') {
     const veh = p.typeVehicule ? p.typeVehicule.replace('_', ' ') : '';
-    return [veh, p.compagnie?.nom ?? p.ville].filter(Boolean).join(' · ');
+    return [veh, p.compagnie?.nom ?? p.ville].filter(Boolean).join(' - ');
   }
-  return p.ville ?? '—';
+  return p.ville ?? '-';
 }
 
 export function Utilisateurs() {
@@ -110,9 +110,9 @@ export function Utilisateurs() {
         </div>
 
         {/* Filtres */}
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_190px_170px] gap-2.5 mb-5">
+        <div className="flex flex-col md:flex-row md:items-center gap-2.5 mb-5">
           <div
-            className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3.5 py-2.5"
+            className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 flex-1"
             style={{ boxShadow: OMBRE }}
           >
             <i className="ti ti-search text-gray-400" />
@@ -123,30 +123,40 @@ export function Utilisateurs() {
               className="outline-none text-sm flex-1 bg-transparent"
             />
           </div>
-          <select
-            value={filtreRole}
-            onChange={(e) => setFiltreRole(e.target.value)}
-            className="bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-coli-encre outline-none"
-            style={{ boxShadow: OMBRE }}
-          >
-            <option value="">Tous les roles</option>
-            {LISTE_ROLES.map((r) => (
-              <option key={r} value={r}>
-                {ROLES[r].libelle}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filtreStatut}
-            onChange={(e) => setFiltreStatut(e.target.value)}
-            className="bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-coli-encre outline-none"
-            style={{ boxShadow: OMBRE }}
-          >
-            <option value="">Tous statuts</option>
-            <option value="EN_ATTENTE">En attente</option>
-            <option value="VALIDE">Valide</option>
-            <option value="REJETE">Rejete</option>
-          </select>
+
+          <div className="relative md:w-52">
+            <i className="ti ti-user-circle absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <select
+              value={filtreRole}
+              onChange={(e) => setFiltreRole(e.target.value)}
+              className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-coli-encre outline-none appearance-none cursor-pointer hover:border-gray-300 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 transition"
+              style={{ boxShadow: OMBRE }}
+            >
+              <option value="">Tous les roles</option>
+              {LISTE_ROLES.map((r) => (
+                <option key={r} value={r}>
+                  {ROLES[r].libelle}
+                </option>
+              ))}
+            </select>
+            <i className="ti ti-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm" />
+          </div>
+
+          <div className="relative md:w-44">
+            <i className="ti ti-filter absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <select
+              value={filtreStatut}
+              onChange={(e) => setFiltreStatut(e.target.value)}
+              className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-coli-encre outline-none appearance-none cursor-pointer hover:border-gray-300 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 transition"
+              style={{ boxShadow: OMBRE }}
+            >
+              <option value="">Tous statuts</option>
+              <option value="EN_ATTENTE">En attente</option>
+              <option value="VALIDE">Valide</option>
+              <option value="REJETE">Rejete</option>
+            </select>
+            <i className="ti ti-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm" />
+          </div>
         </div>
 
         {/* Tableau desktop */}
@@ -161,9 +171,7 @@ export function Utilisateurs() {
             <div>Statut</div>
             <div></div>
           </div>
-          {isLoading && (
-            <div className="px-5 py-8 text-center text-gray-400 text-sm">···</div>
-          )}
+          {isLoading && <div className="px-5 py-8 text-center text-gray-400 text-sm">...</div>}
           {!isLoading && filtrees.length === 0 && (
             <div className="px-5 py-10 text-center text-gray-400 text-sm">
               Aucune personne ne correspond

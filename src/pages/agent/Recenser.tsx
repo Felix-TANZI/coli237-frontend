@@ -10,10 +10,10 @@ import { nettoyerNumero } from '../../composants/formulaire/validation';
 import { NavAgentBas, NavAgentHaut } from '../../composants/NavAgent';
 import { agentConnecte } from '../../api/auth';
 import { LISTE_ROLES, ROLES } from '../../composants/roles';
+import { SelecteurCompagnie } from '../../composants/SelecteurCompagnie';
 
 const OMBRE = '0 1px 3px rgba(14,26,36,.04), 0 4px 16px rgba(14,26,36,.06)';
 
-const STATUTS_CHAUFFEUR = ['EN_ATTENTE', 'DISPONIBLE', 'OCCUPE', 'HORS_LIGNE', 'SUSPENDU'];
 const VEHICULES = ['MOTO', 'TRICYCLE', 'VOITURE', 'CAMIONNETTE', 'AUTRE'];
 
 interface Etat {
@@ -26,7 +26,6 @@ interface Etat {
   typeVehiculeAutre: string;
   plaque: string;
   compagnieId: string;
-  statutChauffeur: string;
 }
 
 const INITIAL: Etat = {
@@ -39,7 +38,6 @@ const INITIAL: Etat = {
   typeVehiculeAutre: '',
   plaque: '',
   compagnieId: '',
-  statutChauffeur: 'EN_ATTENTE',
 };
 
 export function Recenser() {
@@ -73,7 +71,6 @@ export function Recenser() {
         if (etat.typeVehicule === 'AUTRE') donnees.typeVehiculeAutre = etat.typeVehiculeAutre.trim();
         if (etat.plaque.trim()) donnees.plaque = etat.plaque.trim();
         donnees.compagnieId = etat.compagnieId || undefined;
-        donnees.statutChauffeur = etat.statutChauffeur;
       }
 
       // Hors-ligne : on garde en local.
@@ -83,7 +80,7 @@ export function Recenser() {
           apercu: {
             nom: `${etat.prenom} ${etat.nom}`.trim(),
             role: etat.role,
-            lieu: '—',
+            lieu: '-',
           },
         });
         return { local: true };
@@ -105,7 +102,7 @@ export function Recenser() {
   const identiteOk =
     etat.prenom.trim().length >= 2 &&
     etat.nom.trim().length >= 2 &&
-    nettoyerNumero(etat.telephone).length >= 9;
+    nettoyerNumero(etat.telephone).length >= 8;
   const vehiculeOk = etat.role !== 'LIVREUR_AGENCE' || etat.typeVehicule !== '';
   const agenceOk = etat.role !== 'LIVREUR_AGENCE' || etat.compagnieId !== '';
   const peutCreer = identiteOk && vehiculeOk && agenceOk;
@@ -149,7 +146,7 @@ export function Recenser() {
 
         {/* Carte principale */}
         <div className="bg-white rounded-2xl border border-gray-200/70 p-5 md:p-6" style={{ boxShadow: OMBRE }}>
-          {/* Role — menu deroulant */}
+          {/* Role - menu deroulant */}
           <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Role</label>
           <div className="relative mb-6">
             <div
@@ -189,7 +186,6 @@ export function Recenser() {
           {etat.role === 'LIVREUR_AGENCE' && (
             <>
               <SousTitre icone="ti-motorbike" texte="Vehicule" />
-              {/* Type de vehicule — menu deroulant */}
               <div className="mb-4">
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">
                   Type de vehicule <span className="text-coli-orange">*</span>
@@ -202,7 +198,9 @@ export function Recenser() {
                   >
                     <option value="">Selectionner...</option>
                     {VEHICULES.map((v) => (
-                      <option key={v} value={v}>{v === 'AUTRE' ? 'Autre' : v.charAt(0) + v.slice(1).toLowerCase()}</option>
+                      <option key={v} value={v}>
+                        {v === 'AUTRE' ? 'Autre' : v.charAt(0) + v.slice(1).toLowerCase()}
+                      </option>
                     ))}
                   </select>
                   <i className="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -214,39 +212,20 @@ export function Recenser() {
               <Champ label="Plaque" valeur={etat.plaque} onChange={(v) => set('plaque', v)} placeholder="CE 123 AB" />
 
               <SousTitre icone="ti-building-store" texte="Rattachement" />
-              <div className="mb-4">
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">Compagnie <span className="text-coli-orange">*</span></label>
-                <div className="relative">
-                  <select
-                    value={etat.compagnieId}
-                    onChange={(e) => set('compagnieId', e.target.value)}
-                    className="w-full px-4 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan outline-none text-sm bg-white appearance-none cursor-pointer"
-                  >
-                    <option value="">Selectionner une compagnie</option>
-                    {compagnies.map((c) => (
-                      <option key={c.id} value={c.id}>{c.nom}</option>
-                    ))}
-                  </select>
-                  <i className="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                </div>
-                {compagnies.length === 0 && (
-                  <p className="text-[11px] text-coli-orange mt-1">Aucune compagnie disponible.</p>
-                )}
-              </div>
               <div className="mb-1">
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">Statut chauffeur</label>
-                <div className="relative">
-                  <select
-                    value={etat.statutChauffeur}
-                    onChange={(e) => set('statutChauffeur', e.target.value)}
-                    className="w-full px-4 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan outline-none text-sm bg-white appearance-none cursor-pointer"
-                  >
-                    {STATUTS_CHAUFFEUR.map((s) => (
-                      <option key={s} value={s}>{s.charAt(0) + s.slice(1).toLowerCase().replace('_', ' ')}</option>
-                    ))}
-                  </select>
-                  <i className="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                </div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  Compagnie <span className="text-coli-orange">*</span>
+                </label>
+                <SelecteurCompagnie
+                  compagnies={compagnies}
+                  valeur={etat.compagnieId}
+                  onChange={(id) => set('compagnieId', id)}
+                />
+                {compagnies.length === 0 && (
+                  <p className="text-[11px] text-coli-orange mt-1">
+                    Aucune compagnie. Utilisez le bouton + pour en creer une.
+                  </p>
+                )}
               </div>
             </>
           )}
