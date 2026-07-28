@@ -5,8 +5,9 @@ import { listerCompagnies } from '../../api/compagnies';
 import { ajouterEnLocal } from '../../api/fileLocale';
 import { creerPersonne, type NouvellePersonne, type RolePersonne } from '../../api/personnes';
 import { ChampTelephone } from '../../composants/formulaire/ChampTelephone';
+import { ChampValide } from '../../composants/formulaire/ChampValide';
 import { EcranSucces } from '../../composants/formulaire/EcranSucces';
-import { nettoyerNumero } from '../../composants/formulaire/validation';
+import { nettoyerNumero, telephoneValide } from '../../composants/formulaire/validation';
 import { NavAgentBas, NavAgentHaut } from '../../composants/NavAgent';
 import { agentConnecte } from '../../api/auth';
 import { LISTE_ROLES, ROLES } from '../../composants/roles';
@@ -39,6 +40,10 @@ const INITIAL: Etat = {
   plaque: '',
   compagnieId: '',
 };
+
+// Validateurs simples pour l'affichage des coches.
+const nomOk = (v: string) => v.trim().length >= 2;
+const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 export function Recenser() {
   const qc = useQueryClient();
@@ -98,11 +103,8 @@ export function Recenser() {
     },
   });
 
-  // Validation minimale.
-  const identiteOk =
-    etat.prenom.trim().length >= 2 &&
-    etat.nom.trim().length >= 2 &&
-    nettoyerNumero(etat.telephone).length >= 8;
+  // Validation globale pour activer le bouton.
+  const identiteOk = nomOk(etat.prenom) && nomOk(etat.nom) && telephoneValide(etat.telephone);
   const vehiculeOk = etat.role !== 'LIVREUR_AGENCE' || etat.typeVehicule !== '';
   const agenceOk = etat.role !== 'LIVREUR_AGENCE' || etat.compagnieId !== '';
   const peutCreer = identiteOk && vehiculeOk && agenceOk;
@@ -171,8 +173,20 @@ export function Recenser() {
           {/* Identite (commun) */}
           <SousTitre icone="ti-user" texte="Identite" />
           <div className="grid grid-cols-2 gap-3">
-            <Champ label="Prenom" valeur={etat.prenom} onChange={(v) => set('prenom', v)} requis />
-            <Champ label="Nom" valeur={etat.nom} onChange={(v) => set('nom', v)} requis />
+            <ChampValide
+              label="Prenom"
+              valeur={etat.prenom}
+              onChange={(v) => set('prenom', v)}
+              valide={nomOk}
+              requis
+            />
+            <ChampValide
+              label="Nom"
+              valeur={etat.nom}
+              onChange={(v) => set('nom', v)}
+              valide={nomOk}
+              requis
+            />
           </div>
           <ChampTelephone
             label="Telephone"
@@ -180,7 +194,14 @@ export function Recenser() {
             onChange={(v) => set('telephone', v)}
             requis
           />
-          <Champ label="Email (optionnel)" valeur={etat.email} onChange={(v) => set('email', v)} type="email" />
+          <ChampValide
+            label="Email (optionnel)"
+            valeur={etat.email}
+            onChange={(v) => set('email', v)}
+            type="email"
+            optionnel
+            valide={emailOk}
+          />
 
           {/* Vehicule + rattachement (livreur agence seulement) */}
           {etat.role === 'LIVREUR_AGENCE' && (
@@ -207,9 +228,22 @@ export function Recenser() {
                 </div>
               </div>
               {etat.typeVehicule === 'AUTRE' && (
-                <Champ label="Preciser le type" valeur={etat.typeVehiculeAutre} onChange={(v) => set('typeVehiculeAutre', v)} placeholder="Ex : Velo cargo" />
+                <ChampValide
+                  label="Preciser le type"
+                  valeur={etat.typeVehiculeAutre}
+                  onChange={(v) => set('typeVehiculeAutre', v)}
+                  valide={(v) => v.trim().length >= 2}
+                  placeholder="Ex : Velo cargo"
+                />
               )}
-              <Champ label="Plaque" valeur={etat.plaque} onChange={(v) => set('plaque', v)} placeholder="CE 123 AB" />
+              <ChampValide
+                label="Plaque"
+                valeur={etat.plaque}
+                onChange={(v) => set('plaque', v)}
+                valide={(v) => v.trim().length >= 4}
+                optionnel
+                placeholder="CE 123 AB"
+              />
 
               <SousTitre icone="ti-building-store" texte="Rattachement" />
               <div className="mb-1">
@@ -274,38 +308,6 @@ function SousTitre({ icone, texte }: { icone: string; texte: string }) {
     <div className="flex items-center gap-2 mt-5 mb-3">
       <i className={`ti ${icone} text-coli-vert`} />
       <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{texte}</span>
-    </div>
-  );
-}
-
-function Champ({
-  label,
-  valeur,
-  onChange,
-  type = 'text',
-  placeholder,
-  requis,
-}: {
-  label: string;
-  valeur: string;
-  onChange: (v: string) => void;
-  type?: string;
-  placeholder?: string;
-  requis?: boolean;
-}) {
-  return (
-    <div className="mb-4">
-      <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-        {label}
-        {requis && <span className="text-coli-orange ml-0.5">*</span>}
-      </label>
-      <input
-        type={type}
-        value={valeur}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 outline-none text-sm"
-      />
     </div>
   );
 }
