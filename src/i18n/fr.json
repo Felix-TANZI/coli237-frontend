@@ -514,7 +514,11 @@
     "archiverFiche": "Archiver cette fiche",
     "modaleTitre": "Nouvel utilisateur",
     "modaleSousTitre": "Recensement d'une personne",
-    "creerUtilisateur": "Créer l'utilisateur"
+    "creerUtilisateur": "Créer l'utilisateur",
+    "documents": "Documents",
+    "aucunDocument": "Aucun document joint.",
+    "document": "Document",
+    "docErreur": "Impossible d'ouvrir le document."
   },
   "recenser": {
     "titre": "Nouveau recensement",

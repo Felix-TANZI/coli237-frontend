@@ -28,7 +28,7 @@ export interface Personne {
   mobileMoneyOperateur?: string | null;
   agent?: { id: string; nom: string };
   compagnie?: { id: string; nom: string } | null;
-  documents?: { id: string; type: string; chemin: string }[];
+  documents?: { id: string; type: string; chemin: string; nomOriginal?: string }[];
   createdAt: string;
 }
 
@@ -122,4 +122,12 @@ export async function ajouterDocument(
     headers: { 'Content-Type': 'multipart/form-data' },
   });
   return data as { id: string; type: string; chemin: string };
+}
+
+// Recupere l'URL signee temporaire d'un document pour le telecharger/ouvrir.
+export async function urlDocument(personneId: string, documentId: string): Promise<string> {
+  const { data } = await api.get<{ url: string }>(
+    `/personnes/${personneId}/documents/${documentId}/url`,
+  );
+  return data.url;
 }

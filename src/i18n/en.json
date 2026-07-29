@@ -508,7 +508,11 @@
     "archiverFiche": "Archive this record",
     "modaleTitre": "New user",
     "modaleSousTitre": "Record a person",
-    "creerUtilisateur": "Create user"
+    "creerUtilisateur": "Create user",
+    "documents": "Documents",
+    "aucunDocument": "No document attached.",
+    "document": "Document",
+    "docErreur": "Could not open the document."
   },
   "recenser": {
     "titre": "New record",

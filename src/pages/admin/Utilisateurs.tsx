@@ -6,6 +6,7 @@ import {
   archiverPersonne,
   listerPersonnes,
   rejeterPersonne,
+  urlDocument,
   validerPersonne,
   type Personne,
 } from '../../api/personnes';
@@ -56,6 +57,7 @@ export function Utilisateurs() {
   const [filtreRole, setFiltreRole] = useState('');
   const [filtreStatut, setFiltreStatut] = useState('');
   const [detail, setDetail] = useState<Personne | null>(null);
+  const [docEnCours, setDocEnCours] = useState<string | null>(null);
 
   const { data: personnes = [], isLoading } = useQuery({
     queryKey: ['personnes'],
@@ -77,6 +79,20 @@ export function Utilisateurs() {
       setDetail(null);
     },
   });
+
+  // Ouvre un document via une URL signee temporaire.
+  const ouvrirDocument = async (documentId: string) => {
+    if (!detail) return;
+    setDocEnCours(documentId);
+    try {
+      const url = await urlDocument(detail.id, documentId);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {
+      alert(t('utilisateurs.docErreur'));
+    } finally {
+      setDocEnCours(null);
+    }
+  };
 
   const filtrees = useMemo(() => {
     return personnes
@@ -302,11 +318,11 @@ export function Utilisateurs() {
             onClick={() => setDetail(null)}
           >
             <div
-              className="bg-white rounded-2xl w-full max-w-md"
+              className="bg-white rounded-2xl w-full max-w-md max-h-[85vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
               style={{ boxShadow: '0 20px 60px rgba(14,26,36,.25)' }}
             >
-              <div className="p-5 border-b border-gray-100 flex items-center gap-3">
+              <div className="p-5 border-b border-gray-100 flex items-center gap-3 sticky top-0 bg-white">
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center text-base font-semibold text-white"
                   style={{ background: couleurAvatar(detail.nom) }}
@@ -359,6 +375,45 @@ export function Utilisateurs() {
                   valeur={detail.agent?.nom ?? t('utilisateurs.inconnu')}
                 />
               </div>
+
+              {/* Documents joints */}
+              <div className="px-5 pb-2">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                  {t('utilisateurs.documents')} ({detail.documents?.length ?? 0})
+                </div>
+                {!detail.documents || detail.documents.length === 0 ? (
+                  <p className="text-sm text-gray-400 py-2">{t('utilisateurs.aucunDocument')}</p>
+                ) : (
+                  <div className="space-y-2">
+                    {detail.documents.map((d) => (
+                      <button
+                        key={d.id}
+                        onClick={() => ouvrirDocument(d.id)}
+                        disabled={docEnCours === d.id}
+                        className="w-full flex items-center gap-3 p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition text-left disabled:opacity-50"
+                      >
+                        <div className="w-9 h-9 rounded-lg bg-coli-cyan/10 text-coli-cyan flex items-center justify-center shrink-0">
+                          <i className="ti ti-file-text text-lg" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-medium text-coli-encre truncate">
+                            {t(`typesDocument.${d.type}`, { defaultValue: d.type })}
+                          </div>
+                          <div className="text-[11px] text-gray-400 truncate">
+                            {d.nomOriginal ?? t('utilisateurs.document')}
+                          </div>
+                        </div>
+                        {docEnCours === d.id ? (
+                          <i className="ti ti-loader-2 animate-spin text-gray-400" />
+                        ) : (
+                          <i className="ti ti-download text-gray-400" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {detail.statut !== 'VALIDE' && (
                 <div className="p-5 border-t border-gray-100 flex gap-2.5">
                   <button
