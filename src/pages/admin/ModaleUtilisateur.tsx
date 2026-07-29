@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { listerCompagnies } from '../../api/compagnies';
 import { creerPersonne, type NouvellePersonne, type RolePersonne } from '../../api/personnes';
 import { ChampTelephone } from '../../composants/formulaire/ChampTelephone';
@@ -39,6 +40,7 @@ const nomOk = (v: string) => v.trim().length >= 2;
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [etat, setEtat] = useState<Etat>(INITIAL);
 
@@ -91,9 +93,9 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div>
             <div className="font-extrabold text-lg text-coli-encre" style={{ fontFamily: 'Sora, Inter' }}>
-              Nouvel utilisateur
+              {t('utilisateurs.modaleTitre')}
             </div>
-            <div className="text-xs text-gray-400">Recensement d'une personne</div>
+            <div className="text-xs text-gray-400">{t('utilisateurs.modaleSousTitre')}</div>
           </div>
           <button
             onClick={onFermer}
@@ -105,7 +107,9 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
 
         <div className="px-6 py-5 max-h-[70vh] overflow-y-auto">
           {/* Role - menu deroulant */}
-          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Role</label>
+          <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
+            {t('formulaire.role')}
+          </label>
           <div className="relative mb-6">
             <div
               className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center pointer-events-none"
@@ -120,24 +124,24 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
               style={{ borderColor: infoRole.couleur, color: infoRole.couleur }}
             >
               {LISTE_ROLES.map((r) => (
-                <option key={r} value={r}>{ROLES[r].libelle}</option>
+                <option key={r} value={r}>{t(`roles.${r}`)}</option>
               ))}
             </select>
             <i className="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: infoRole.couleur }} />
           </div>
 
           {/* Identite */}
-          <SousTitre icone="ti-user" texte="Identite" />
+          <SousTitre icone="ti-user" texte={t('formulaire.identite')} />
           <div className="grid grid-cols-2 gap-3">
             <ChampValide
-              label="Prenom"
+              label={t('formulaire.prenom')}
               valeur={etat.prenom}
               onChange={(v) => set('prenom', v)}
               valide={nomOk}
               requis
             />
             <ChampValide
-              label="Nom"
+              label={t('formulaire.nom')}
               valeur={etat.nom}
               onChange={(v) => set('nom', v)}
               valide={nomOk}
@@ -145,13 +149,13 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
             />
           </div>
           <ChampTelephone
-            label="Telephone"
+            label={t('formulaire.telephone')}
             valeur={etat.telephone}
             onChange={(v) => set('telephone', v)}
             requis
           />
           <ChampValide
-            label="Email (optionnel)"
+            label={t('formulaire.emailOptionnel')}
             valeur={etat.email}
             onChange={(v) => set('email', v)}
             type="email"
@@ -162,10 +166,10 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
           {/* Vehicule + rattachement (livreur agence) */}
           {etat.role === 'LIVREUR_AGENCE' && (
             <>
-              <SousTitre icone="ti-motorbike" texte="Vehicule" />
+              <SousTitre icone="ti-motorbike" texte={t('formulaire.vehicule')} />
               <div className="mb-4">
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-                  Type de vehicule <span className="text-coli-orange">*</span>
+                  {t('formulaire.typeVehicule')} <span className="text-coli-orange">*</span>
                 </label>
                 <div className="relative">
                   <select
@@ -173,10 +177,10 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
                     onChange={(e) => set('typeVehicule', e.target.value)}
                     className="w-full px-4 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan outline-none text-sm bg-white appearance-none cursor-pointer"
                   >
-                    <option value="">Selectionner...</option>
+                    <option value="">{t('commun.selectionner')}</option>
                     {VEHICULES.map((v) => (
                       <option key={v} value={v}>
-                        {v === 'AUTRE' ? 'Autre' : v.charAt(0) + v.slice(1).toLowerCase()}
+                        {t(`vehicules.${v}`)}
                       </option>
                     ))}
                   </select>
@@ -185,26 +189,26 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
               </div>
               {etat.typeVehicule === 'AUTRE' && (
                 <ChampValide
-                  label="Preciser le type"
+                  label={t('formulaire.preciserType')}
                   valeur={etat.typeVehiculeAutre}
                   onChange={(v) => set('typeVehiculeAutre', v)}
                   valide={(v) => v.trim().length >= 2}
-                  placeholder="Ex : Velo cargo"
+                  placeholder={t('formulaire.preciserPlaceholder')}
                 />
               )}
               <ChampValide
-                label="Plaque"
+                label={t('formulaire.plaque')}
                 valeur={etat.plaque}
                 onChange={(v) => set('plaque', v)}
                 valide={(v) => v.trim().length >= 4}
                 optionnel
-                placeholder="CE 123 AB"
+                placeholder={t('formulaire.plaquePlaceholder')}
               />
 
-              <SousTitre icone="ti-building-store" texte="Rattachement" />
+              <SousTitre icone="ti-building-store" texte={t('formulaire.rattachement')} />
               <div className="mb-1">
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-                  Compagnie <span className="text-coli-orange">*</span>
+                  {t('formulaire.compagnie')} <span className="text-coli-orange">*</span>
                 </label>
                 <SelecteurCompagnie
                   compagnies={compagnies}
@@ -213,7 +217,7 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
                 />
                 {compagnies.length === 0 && (
                   <p className="text-[11px] text-coli-orange mt-1">
-                    Aucune compagnie. Utilisez le bouton + pour en creer une.
+                    {t('formulaire.aucuneCompagnie')}
                   </p>
                 )}
               </div>
@@ -223,11 +227,11 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
           {/* Documents (livreur independant) */}
           {etat.role === 'LIVREUR_INDEPENDANT' && (
             <>
-              <SousTitre icone="ti-files" texte="Documents coursier" />
+              <SousTitre icone="ti-files" texte={t('formulaire.documentsCoursier')} />
               <div className="p-4 rounded-xl bg-gray-50 border border-dashed border-gray-200 flex items-center gap-3">
                 <i className="ti ti-cloud-upload text-gray-400 text-xl" />
                 <div className="text-xs text-gray-500">
-                  Les documents (CNI, permis...) pourront etre ajoutes apres la creation de la fiche.
+                  {t('formulaire.docsApresCreation')}
                 </div>
               </div>
             </>
@@ -239,14 +243,14 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
           {creation.isError && (
             <span className="text-xs text-red-600 mr-auto flex items-center gap-1">
               <i className="ti ti-alert-circle" />
-              Erreur lors de la creation
+              {t('commun.erreurCreation')}
             </span>
           )}
           <button
             onClick={onFermer}
             className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition"
           >
-            Annuler
+            {t('commun.annuler')}
           </button>
           <button
             onClick={() => creation.mutate()}
@@ -255,7 +259,7 @@ export function ModaleUtilisateur({ onFermer }: { onFermer: () => void }) {
             style={{ boxShadow: OMBRE }}
           >
             {creation.isPending ? <i className="ti ti-loader-2 animate-spin" /> : <i className="ti ti-check" />}
-            Creer l'utilisateur
+            {t('utilisateurs.creerUtilisateur')}
           </button>
         </div>
       </div>

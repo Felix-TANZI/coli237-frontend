@@ -88,7 +88,7 @@ export function AccueilAgent() {
                   <i
                     className={`ti ${synchroEnCours ? 'ti-loader-2 animate-spin' : 'ti-cloud-up'} text-sm`}
                   />
-                  {t('agent.aSynchroniser', { n: aSynchroniser })}
+                  {t('agent.aSynchroniser', { count: aSynchroniser })}
                   {enLigne && !synchroEnCours && <i className="ti ti-refresh text-xs ml-0.5" />}
                 </button>
               ) : enLigne ? (
@@ -187,7 +187,7 @@ export function AccueilAgent() {
                     <span
                       className={`text-[9px] ${r.estAujourdhui ? 'text-coli-orange font-semibold' : 'text-gray-400'}`}
                     >
-                      {r.jour}
+                      {t(`jours.${r.jour}`)}
                     </span>
                   </div>
                 ))}
@@ -233,7 +233,7 @@ export function AccueilAgent() {
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-medium text-coli-encre truncate">{r.nom}</div>
                         <div className="text-xs text-gray-400 truncate">
-                          {r.type} · {r.lieu}
+                          {t(`roles.${r.type}`, { defaultValue: r.type })} · {r.lieu}
                         </div>
                       </div>
                       <span

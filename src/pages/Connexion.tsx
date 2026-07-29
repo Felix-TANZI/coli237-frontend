@@ -84,12 +84,10 @@ export function Connexion() {
         </div>
 
         <h1 className="text-white font-extrabold text-2xl tracking-tight">
-          {mode === 'connexion' ? t('connexion.titre') : 'Creer un compte'}
+          {mode === 'connexion' ? t('connexion.titre') : t('connexion.creerCompte')}
         </h1>
         <p className="text-white/60 text-sm mt-1.5 mb-6">
-          {mode === 'connexion'
-            ? t('connexion.sousTitre')
-            : 'Inscrivez-vous pour commencer a recenser'}
+          {mode === 'connexion' ? t('connexion.sousTitre') : t('connexion.inscrisToi')}
         </p>
 
         {/* ===== MODE CONNEXION ===== */}
@@ -209,7 +207,7 @@ export function Connexion() {
               type="text"
               valeur={nom}
               onChange={setNom}
-              label="Nom complet"
+              label={t('connexion.nomComplet')}
               placeholder="Kevin Roldan"
             />
             <ChampInscription
@@ -217,8 +215,8 @@ export function Connexion() {
               type="email"
               valeur={email}
               onChange={setEmail}
-              label="Email"
-              placeholder="exemple@mail.com"
+              label={t('connexion.emailLabel')}
+              placeholder={t('connexion.emailPlaceholder')}
             />
 
             {/* Telephone avec selecteur de pays (version sombre, locale) */}
@@ -234,7 +232,7 @@ export function Connexion() {
                   type={afficherMdp ? 'text' : 'password'}
                   value={motDePasse}
                   onChange={(e) => setMotDePasse(e.target.value)}
-                  placeholder="Au moins 6 caracteres"
+                  placeholder={t('connexion.mdpMin')}
                   required
                   autoComplete="new-password"
                   className="w-full pl-11 pr-11 py-2.5 rounded-xl outline-none text-white placeholder-white/40 border transition"
@@ -243,6 +241,7 @@ export function Connexion() {
                 <button
                   type="button"
                   onClick={() => setAfficherMdp((v) => !v)}
+                  aria-label={afficherMdp ? t('connexion.masquer') : t('connexion.afficher')}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-coli-vert transition"
                 >
                   <i className={`ti ${afficherMdp ? 'ti-eye-off' : 'ti-eye'} text-lg`} />
@@ -253,7 +252,7 @@ export function Connexion() {
             {inscription.isError && (
               <p className="text-xs text-red-300 flex items-center gap-1.5">
                 <i className="ti ti-alert-circle" />
-                Cet email ou telephone est deja utilise.
+                {t('connexion.emailDejaUtilise')}
               </p>
             )}
 
@@ -265,10 +264,10 @@ export function Connexion() {
               {inscription.isPending ? (
                 <>
                   <i className="ti ti-loader-2 animate-spin" />
-                  Creation...
+                  {t('connexion.creation')}
                 </>
               ) : (
-                'Creer mon compte'
+                t('connexion.creerBouton')
               )}
             </button>
           </form>
@@ -278,22 +277,22 @@ export function Connexion() {
         <div className="text-center mt-5 text-xs text-white/60">
           {mode === 'connexion' ? (
             <>
-              Pas encore de compte ?{' '}
+              {t('connexion.pasCompte')}{' '}
               <button
                 onClick={() => setMode('inscription')}
                 className="text-coli-vert font-semibold hover:underline"
               >
-                Creer un compte
+                {t('connexion.creerCompte')}
               </button>
             </>
           ) : (
             <>
-              Deja un compte ?{' '}
+              {t('connexion.dejaCompte')}{' '}
               <button
                 onClick={() => setMode('connexion')}
                 className="text-coli-vert font-semibold hover:underline"
               >
-                Se connecter
+                {t('connexion.seConnecterLien')}
               </button>
             </>
           )}
@@ -358,6 +357,7 @@ function ChampTelephoneSombre({
   valeur: string;
   onChange: (v: string) => void;
 }) {
+  const { t } = useTranslation();
   const [codePays, setCodePays] = useState('CM');
   const [ouvert, setOuvert] = useState(false);
   const refMenu = useRef<HTMLDivElement>(null);
@@ -406,7 +406,7 @@ function ChampTelephoneSombre({
   return (
     <div>
       <label className="block text-xs font-medium text-white/75 mb-1.5">
-        Telephone <span className="text-coli-orange">*</span>
+        {t('connexion.telephone')} <span className="text-coli-orange">*</span>
       </label>
       <div className="flex gap-2">
         {/* Selecteur de pays custom */}
@@ -453,7 +453,7 @@ function ChampTelephoneSombre({
                     }}
                   >
                     <span className="text-base leading-none">{p.drapeau}</span>
-                    <span className="flex-1">{p.nom}</span>
+                    <span className="flex-1">{t(`pays.${p.code}`, { defaultValue: p.nom })}</span>
                     <span className="text-white/50 text-xs">{p.indicatif}</span>
                   </button>
                 );
@@ -469,7 +469,7 @@ function ChampTelephoneSombre({
             inputMode="numeric"
             value={afficher(numeroNational)}
             onChange={(e) => surSaisie(e.target.value)}
-            placeholder="6 90 12 34 56"
+            placeholder={t('connexion.telPlaceholder')}
             required
             autoComplete="off"
             className="w-full pl-4 pr-10 py-2.5 rounded-xl outline-none text-white placeholder-white/40 border transition text-sm"

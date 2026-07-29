@@ -1,10 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import {
-  archiverCompagnie,
-  creerCompagnie,
-  listerCompagnies,
-} from '../../api/compagnies';
+import { useTranslation } from 'react-i18next';
+import { archiverCompagnie, creerCompagnie, listerCompagnies } from '../../api/compagnies';
 import { BarreNav, BarreNavMobile } from '../../composants/BarreNav';
 
 const OMBRE = '0 1px 3px rgba(14,26,36,.04), 0 4px 16px rgba(14,26,36,.06)';
@@ -25,6 +22,7 @@ function initiales(nom: string): string {
 }
 
 export function Compagnies() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [modalOuvert, setModalOuvert] = useState(false);
   const [recherche, setRecherche] = useState('');
@@ -57,11 +55,10 @@ export function Compagnies() {
               className="font-extrabold text-2xl text-coli-encre tracking-tight"
               style={{ fontFamily: 'Sora, Inter' }}
             >
-              Compagnies
+              {t('compagnies.titre')}
             </h1>
             <p className="text-sm text-gray-400 mt-0.5">
-              {compagnies.length} compagnie{compagnies.length > 1 ? 's' : ''} enregistree
-              {compagnies.length > 1 ? 's' : ''}
+              {t('compagnies.sousTitre', { count: compagnies.length })}
             </p>
           </div>
           <button
@@ -70,7 +67,7 @@ export function Compagnies() {
             style={{ boxShadow: '0 6px 16px rgba(242,140,40,.3)' }}
           >
             <i className="ti ti-plus" />
-            <span className="hidden sm:inline">Nouvelle compagnie</span>
+            <span className="hidden sm:inline">{t('compagnies.nouvelle')}</span>
           </button>
         </div>
 
@@ -83,7 +80,7 @@ export function Compagnies() {
           <input
             value={recherche}
             onChange={(e) => setRecherche(e.target.value)}
-            placeholder="Rechercher une compagnie..."
+            placeholder={t('compagnies.rechercher')}
             className="outline-none text-sm flex-1 bg-transparent"
           />
         </div>
@@ -93,22 +90,23 @@ export function Compagnies() {
           className="hidden md:block bg-white rounded-2xl border border-gray-200/70 overflow-hidden"
           style={{ boxShadow: OMBRE }}
         >
-          <div className="grid grid-cols-[2fr_1fr_1fr_auto] gap-3 px-5 py-3 bg-gray-50/70 border-b border-gray-100 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
-            <div>Compagnie</div>
-            <div>Statut</div>
-            <div>Personnes</div>
+          <div className="grid grid-cols-[2fr_1.4fr_1fr_1fr_auto] gap-3 px-5 py-3 bg-gray-50/70 border-b border-gray-100 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
+            <div>{t('compagnies.colCompagnie')}</div>
+            <div>{t('compagnies.colRecensePar')}</div>
+            <div>{t('compagnies.colStatut')}</div>
+            <div>{t('compagnies.colPersonnes')}</div>
             <div></div>
           </div>
-          {isLoading && <div className="px-5 py-8 text-center text-gray-400 text-sm">···</div>}
+          {isLoading && <div className="px-5 py-8 text-center text-gray-400 text-sm">...</div>}
           {!isLoading && filtrees.length === 0 && (
             <div className="px-5 py-10 text-center text-gray-400 text-sm">
-              Aucune compagnie
+              {t('compagnies.aucune')}
             </div>
           )}
           {filtrees.map((c) => (
             <div
               key={c.id}
-              className="grid grid-cols-[2fr_1fr_1fr_auto] gap-3 px-5 py-3 border-b border-gray-50 last:border-none items-center hover:bg-gray-50/50 transition"
+              className="grid grid-cols-[2fr_1.4fr_1fr_1fr_auto] gap-3 px-5 py-3 border-b border-gray-50 last:border-none items-center hover:bg-gray-50/50 transition"
             >
               <div className="flex items-center gap-3">
                 <div
@@ -118,6 +116,10 @@ export function Compagnies() {
                   {initiales(c.nom)}
                 </div>
                 <div className="text-sm font-semibold text-coli-encre truncate">{c.nom}</div>
+              </div>
+              <div className="flex items-center gap-2 min-w-0">
+                <i className="ti ti-user-shield text-gray-300 text-sm shrink-0" />
+                <span className="text-sm text-gray-600 truncate">{c.agent?.nom ?? '-'}</span>
               </div>
               <div>
                 <span
@@ -132,14 +134,14 @@ export function Compagnies() {
                     className="w-1.5 h-1.5 rounded-full"
                     style={{ background: c.statut === 'ACTIVE' ? '#1FB89E' : '#b0bcc4' }}
                   />
-                  {c.statut === 'ACTIVE' ? 'Active' : 'Inactive'}
+                  {t(`statuts.${c.statut === 'ACTIVE' ? 'ACTIVE' : 'INACTIVE'}`)}
                 </span>
               </div>
               <div className="text-sm text-gray-600">{c._count?.personnes ?? 0}</div>
               <button
                 onClick={() => archiver.mutate(c.id)}
                 className="w-8 h-8 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition"
-                aria-label="Archiver"
+                aria-label={t('compagnies.archiverAria')}
               >
                 <i className="ti ti-trash" />
               </button>
@@ -149,9 +151,9 @@ export function Compagnies() {
 
         {/* Cartes mobile */}
         <div className="md:hidden space-y-2.5">
-          {isLoading && <p className="text-sm text-gray-400 py-8 text-center">···</p>}
+          {isLoading && <p className="text-sm text-gray-400 py-8 text-center">...</p>}
           {!isLoading && filtrees.length === 0 && (
-            <p className="text-sm text-gray-400 py-8 text-center">Aucune compagnie</p>
+            <p className="text-sm text-gray-400 py-8 text-center">{t('compagnies.aucune')}</p>
           )}
           {filtrees.map((c) => (
             <div
@@ -168,17 +170,36 @@ export function Compagnies() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold text-coli-encre truncate">{c.nom}</div>
-                  <div className="text-[11px] text-gray-400">
-                    {c._count?.personnes ?? 0} personne{(c._count?.personnes ?? 0) > 1 ? 's' : ''}
+                  <div className="text-[11px] text-gray-400 truncate">
+                    {t('compagnies.recenseParNom', { nom: c.agent?.nom ?? '-' })}
                   </div>
                 </div>
                 <button
                   onClick={() => archiver.mutate(c.id)}
-                  className="w-8 h-8 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition"
-                  aria-label="Archiver"
+                  className="w-8 h-8 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition shrink-0"
+                  aria-label={t('compagnies.archiverAria')}
                 >
                   <i className="ti ti-trash" />
                 </button>
+              </div>
+              <div className="mt-3 pt-3 border-t border-gray-50 flex items-center justify-between">
+                <span
+                  className="text-[11px] font-semibold px-2.5 py-1 rounded-full inline-flex items-center gap-1"
+                  style={
+                    c.statut === 'ACTIVE'
+                      ? { background: '#e8f8f3', color: '#0F6E56' }
+                      : { background: '#f2f5f7', color: '#8a99a3' }
+                  }
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ background: c.statut === 'ACTIVE' ? '#1FB89E' : '#b0bcc4' }}
+                  />
+                  {t(`statuts.${c.statut === 'ACTIVE' ? 'ACTIVE' : 'INACTIVE'}`)}
+                </span>
+                <span className="text-[11px] text-gray-400">
+                  {t('compagnies.personnes', { count: c._count?.personnes ?? 0 })}
+                </span>
               </div>
             </div>
           ))}
@@ -194,6 +215,7 @@ export function Compagnies() {
 
 // --- Modal creation ---
 function ModaleCompagnie({ onFermer }: { onFermer: () => void }) {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [nom, setNom] = useState('');
   const [statut, setStatut] = useState('ACTIVE');
@@ -218,8 +240,8 @@ function ModaleCompagnie({ onFermer }: { onFermer: () => void }) {
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div>
-            <div className="font-bold text-coli-encre">Nouvelle compagnie</div>
-            <div className="text-xs text-gray-400">Renseignez les informations</div>
+            <div className="font-bold text-coli-encre">{t('compagnies.nouvelle')}</div>
+            <div className="text-xs text-gray-400">{t('compagnies.modaleSousTitre')}</div>
           </div>
           <button
             onClick={onFermer}
@@ -231,25 +253,28 @@ function ModaleCompagnie({ onFermer }: { onFermer: () => void }) {
         <div className="p-5 space-y-4">
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-              Nom de la compagnie <span className="text-coli-orange">*</span>
+              {t('compagnies.nomLabel')} <span className="text-coli-orange">*</span>
             </label>
             <input
               value={nom}
               onChange={(e) => setNom(e.target.value)}
-              placeholder="Ex : SwiftLink Delivery"
+              placeholder={t('compagnies.nomPlaceholder')}
+              autoFocus
               className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 outline-none text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Statut</label>
+            <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              {t('compagnies.statutLabel')}
+            </label>
             <div className="relative">
               <select
                 value={statut}
                 onChange={(e) => setStatut(e.target.value)}
                 className="w-full px-4 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:border-coli-cyan outline-none text-sm bg-white appearance-none cursor-pointer"
               >
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
+                <option value="ACTIVE">{t('statuts.ACTIVE')}</option>
+                <option value="INACTIVE">{t('statuts.INACTIVE')}</option>
               </select>
               <i className="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             </div>
@@ -260,25 +285,21 @@ function ModaleCompagnie({ onFermer }: { onFermer: () => void }) {
             onClick={onFermer}
             className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition"
           >
-            Annuler
+            {t('commun.annuler')}
           </button>
           <button
             onClick={() => creation.mutate()}
             disabled={creation.isPending || nom.trim().length < 2}
             className="flex-1 py-2.5 rounded-xl bg-coli-vert text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-40 hover:bg-emerald-600 transition"
           >
-            {creation.isPending ? (
-              <i className="ti ti-loader-2 animate-spin" />
-            ) : (
-              <i className="ti ti-check" />
-            )}
-            Creer
+            {creation.isPending ? <i className="ti ti-loader-2 animate-spin" /> : <i className="ti ti-check" />}
+            {t('commun.creer')}
           </button>
         </div>
         {creation.isError && (
           <p className="text-xs text-red-600 px-5 pb-4 flex items-center gap-1">
             <i className="ti ti-alert-circle" />
-            Erreur lors de la creation
+            {t('commun.erreurCreation')}
           </p>
         )}
       </div>

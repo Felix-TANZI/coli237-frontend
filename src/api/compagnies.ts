@@ -6,6 +6,7 @@ export interface Compagnie {
   statut: string;
   adminId?: string | null;
   admin?: { id: string; prenom: string; nom: string } | null;
+  agent?: { id: string; nom: string } | null;
   _count?: { personnes: number };
   createdAt: string;
 }

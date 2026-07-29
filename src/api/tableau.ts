@@ -1,5 +1,4 @@
 import { api } from './client';
-import { ROLES } from '../composants/roles';
 import type { Personne } from './personnes';
 
 export interface StatsTableau {
@@ -28,10 +27,6 @@ interface Agent {
   statut: string;
 }
 
-function libelleRole(role: string): string {
-  return ROLES[role as keyof typeof ROLES]?.libelle ?? role;
-}
-
 export async function chargerTableau(): Promise<StatsTableau> {
   const [personnes, agents] = await Promise.all([
     api.get<Personne[]>('/personnes').then((r) => r.data),
@@ -58,9 +53,10 @@ export async function chargerTableau(): Promise<StatsTableau> {
     compteRole[p.role] = (compteRole[p.role] ?? 0) + 1;
   }
   const total = personnes.length || 1;
+  // `type` porte le code du role ; le libelle est traduit a l'affichage (i18n "roles").
   const parRole = Object.entries(compteRole)
     .map(([role, nombre]) => ({
-      type: libelleRole(role),
+      type: role,
       nombre,
       pourcent: Math.round((nombre / total) * 100),
     }))
@@ -90,7 +86,7 @@ export async function chargerTableau(): Promise<StatsTableau> {
     .map((p) => ({
       id: p.id,
       nom: `${p.prenom} ${p.nom}`,
-      type: libelleRole(p.role),
+      type: p.role,
       lieu: p.ville ?? '-',
       statut: p.statut,
       date: p.createdAt,

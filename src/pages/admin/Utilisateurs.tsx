@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import {
   archiverPersonne,
   listerPersonnes,
@@ -13,10 +15,10 @@ import { ModaleUtilisateur } from './ModaleUtilisateur';
 
 const OMBRE = '0 1px 3px rgba(14,26,36,.04), 0 4px 16px rgba(14,26,36,.06)';
 
-const STATUTS: Record<string, { libelle: string; bg: string; texte: string; icone: string }> = {
-  EN_ATTENTE: { libelle: 'En attente', bg: '#fdf0e3', texte: '#985a12', icone: 'ti-clock' },
-  VALIDE: { libelle: 'Valide', bg: '#e8f8f3', texte: '#0F6E56', icone: 'ti-circle-check' },
-  REJETE: { libelle: 'Rejete', bg: '#fdeaea', texte: '#a32d2d', icone: 'ti-x' },
+const STATUTS: Record<string, { cle: string; bg: string; texte: string; icone: string }> = {
+  EN_ATTENTE: { cle: 'EN_ATTENTE', bg: '#fdf0e3', texte: '#985a12', icone: 'ti-clock' },
+  VALIDE: { cle: 'VALIDE', bg: '#e8f8f3', texte: '#0F6E56', icone: 'ti-circle-check' },
+  REJETE: { cle: 'REJETE', bg: '#fdeaea', texte: '#a32d2d', icone: 'ti-x' },
 };
 
 function couleurAvatar(nom: string): string {
@@ -33,15 +35,21 @@ function formaterTel(tel: string): string {
   if (n.length === 0) return tel;
   return `+237 ${n[0]} ${n.slice(1).replace(/(\d{2})(?=\d)/g, '$1 ')}`.trim();
 }
-function sousTitre(p: Personne): string {
+// Libelle traduit d'un type de vehicule (repli : la valeur brute).
+function libelleVehicule(t: TFunction, type: string): string {
+  return t(`vehicules.${type}`, { defaultValue: type.replace('_', ' ') });
+}
+
+function sousTitre(p: Personne, t: TFunction): string {
   if (p.role === 'LIVREUR_INDEPENDANT' || p.role === 'LIVREUR_AGENCE') {
-    const veh = p.typeVehicule ? p.typeVehicule.replace('_', ' ') : '';
+    const veh = p.typeVehicule ? libelleVehicule(t, p.typeVehicule) : '';
     return [veh, p.compagnie?.nom ?? p.ville].filter(Boolean).join(' - ');
   }
   return p.ville ?? '-';
 }
 
 export function Utilisateurs() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [modalOuvert, setModalOuvert] = useState(false);
   const [recherche, setRecherche] = useState('');
@@ -92,11 +100,10 @@ export function Utilisateurs() {
               className="font-extrabold text-2xl text-coli-encre tracking-tight"
               style={{ fontFamily: 'Sora, Inter' }}
             >
-              Utilisateurs
+              {t('utilisateurs.titre')}
             </h1>
             <p className="text-sm text-gray-400 mt-0.5">
-              {personnes.length} personne{personnes.length > 1 ? 's' : ''} recensee
-              {personnes.length > 1 ? 's' : ''}
+              {t('utilisateurs.sousTitre', { count: personnes.length })}
             </p>
           </div>
           <button
@@ -105,7 +112,7 @@ export function Utilisateurs() {
             style={{ boxShadow: '0 6px 16px rgba(242,140,40,.3)' }}
           >
             <i className="ti ti-plus" />
-            <span className="hidden sm:inline">Nouvel utilisateur</span>
+            <span className="hidden sm:inline">{t('utilisateurs.nouveau')}</span>
           </button>
         </div>
 
@@ -119,7 +126,7 @@ export function Utilisateurs() {
             <input
               value={recherche}
               onChange={(e) => setRecherche(e.target.value)}
-              placeholder="Nom, telephone..."
+              placeholder={t('utilisateurs.rechercher')}
               className="outline-none text-sm flex-1 bg-transparent"
             />
           </div>
@@ -132,10 +139,10 @@ export function Utilisateurs() {
               className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-coli-encre outline-none appearance-none cursor-pointer hover:border-gray-300 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 transition"
               style={{ boxShadow: OMBRE }}
             >
-              <option value="">Tous les roles</option>
+              <option value="">{t('utilisateurs.tousRoles')}</option>
               {LISTE_ROLES.map((r) => (
                 <option key={r} value={r}>
-                  {ROLES[r].libelle}
+                  {t(`roles.${r}`)}
                 </option>
               ))}
             </select>
@@ -150,10 +157,10 @@ export function Utilisateurs() {
               className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-coli-encre outline-none appearance-none cursor-pointer hover:border-gray-300 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 transition"
               style={{ boxShadow: OMBRE }}
             >
-              <option value="">Tous statuts</option>
-              <option value="EN_ATTENTE">En attente</option>
-              <option value="VALIDE">Valide</option>
-              <option value="REJETE">Rejete</option>
+              <option value="">{t('utilisateurs.tousStatuts')}</option>
+              <option value="EN_ATTENTE">{t('statuts.EN_ATTENTE')}</option>
+              <option value="VALIDE">{t('statuts.VALIDE')}</option>
+              <option value="REJETE">{t('statuts.REJETE')}</option>
             </select>
             <i className="ti ti-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm" />
           </div>
@@ -164,17 +171,18 @@ export function Utilisateurs() {
           className="hidden md:block bg-white rounded-2xl border border-gray-200/70 overflow-hidden"
           style={{ boxShadow: OMBRE }}
         >
-          <div className="grid grid-cols-[2fr_1.4fr_1.4fr_1fr_auto] gap-3 px-5 py-3 bg-gray-50/70 border-b border-gray-100 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
-            <div>Nom</div>
-            <div>Telephone</div>
-            <div>Role</div>
-            <div>Statut</div>
+          <div className="grid grid-cols-[2fr_1.3fr_1.3fr_1.2fr_1fr_auto] gap-3 px-5 py-3 bg-gray-50/70 border-b border-gray-100 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
+            <div>{t('utilisateurs.colNom')}</div>
+            <div>{t('utilisateurs.colTelephone')}</div>
+            <div>{t('utilisateurs.colRole')}</div>
+            <div>{t('utilisateurs.colRecensePar')}</div>
+            <div>{t('utilisateurs.colStatut')}</div>
             <div></div>
           </div>
           {isLoading && <div className="px-5 py-8 text-center text-gray-400 text-sm">...</div>}
           {!isLoading && filtrees.length === 0 && (
             <div className="px-5 py-10 text-center text-gray-400 text-sm">
-              Aucune personne ne correspond
+              {t('utilisateurs.aucune')}
             </div>
           )}
           {filtrees.map((p) => {
@@ -183,7 +191,7 @@ export function Utilisateurs() {
             return (
               <div
                 key={p.id}
-                className="grid grid-cols-[2fr_1.4fr_1.4fr_1fr_auto] gap-3 px-5 py-3 border-b border-gray-50 last:border-none items-center hover:bg-gray-50/50 transition"
+                className="grid grid-cols-[2fr_1.3fr_1.3fr_1.2fr_1fr_auto] gap-3 px-5 py-3 border-b border-gray-50 last:border-none items-center hover:bg-gray-50/50 transition"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -196,7 +204,7 @@ export function Utilisateurs() {
                     <div className="text-sm font-semibold text-coli-encre truncate">
                       {p.prenom} {p.nom}
                     </div>
-                    <div className="text-[11px] text-gray-400 truncate">{sousTitre(p)}</div>
+                    <div className="text-[11px] text-gray-400 truncate">{sousTitre(p, t)}</div>
                   </div>
                 </div>
                 <div className="text-sm text-gray-600">{formaterTel(p.telephone)}</div>
@@ -205,8 +213,12 @@ export function Utilisateurs() {
                     className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
                     style={{ background: info.fond, color: info.couleur }}
                   >
-                    {info.libelle}
+                    {t(`roles.${p.role}`)}
                   </span>
+                </div>
+                <div className="flex items-center gap-2 min-w-0">
+                  <i className="ti ti-user-shield text-gray-300 text-sm shrink-0" />
+                  <span className="text-sm text-gray-600 truncate">{p.agent?.nom ?? '-'}</span>
                 </div>
                 <div>
                   <span
@@ -214,7 +226,7 @@ export function Utilisateurs() {
                     style={{ background: st.bg, color: st.texte }}
                   >
                     <i className={`ti ${st.icone} text-[11px]`} />
-                    {st.libelle}
+                    {t(`statuts.${st.cle}`)}
                   </span>
                 </div>
                 <button
@@ -260,15 +272,19 @@ export function Utilisateurs() {
                     style={{ background: st.bg, color: st.texte }}
                   >
                     <i className={`ti ${st.icone} text-[11px]`} />
-                    {st.libelle}
+                    {t(`statuts.${st.cle}`)}
                   </span>
                 </div>
-                <div className="mt-2.5">
+                <div className="mt-2.5 flex items-center justify-between">
                   <span
                     className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
                     style={{ background: info.fond, color: info.couleur }}
                   >
-                    {info.libelle}
+                    {t(`roles.${p.role}`)}
+                  </span>
+                  <span className="text-[11px] text-gray-400 flex items-center gap-1">
+                    <i className="ti ti-user-shield" />
+                    {p.agent?.nom ?? '-'}
                   </span>
                 </div>
               </button>
@@ -305,7 +321,7 @@ export function Utilisateurs() {
                     className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
                     style={{ background: ROLES[detail.role].fond, color: ROLES[detail.role].couleur }}
                   >
-                    {ROLES[detail.role].libelle}
+                    {t(`roles.${detail.role}`)}
                   </span>
                 </div>
                 <button
@@ -316,14 +332,32 @@ export function Utilisateurs() {
                 </button>
               </div>
               <div className="p-5 space-y-2 text-sm">
-                <Ligne label="Telephone" valeur={formaterTel(detail.telephone)} />
-                {detail.email && <Ligne label="Email" valeur={detail.email} />}
-                {detail.ville && <Ligne label="Ville" valeur={detail.ville} />}
-                {detail.compagnie && <Ligne label="Compagnie" valeur={detail.compagnie.nom} />}
-                {detail.typeVehicule && (
-                  <Ligne label="Vehicule" valeur={detail.typeVehicule.replace('_', ' ')} />
+                <Ligne
+                  label={t('utilisateurs.detailTelephone')}
+                  valeur={formaterTel(detail.telephone)}
+                />
+                {detail.email && (
+                  <Ligne label={t('utilisateurs.detailEmail')} valeur={detail.email} />
                 )}
-                {detail.plaque && <Ligne label="Plaque" valeur={detail.plaque} />}
+                {detail.ville && (
+                  <Ligne label={t('utilisateurs.detailVille')} valeur={detail.ville} />
+                )}
+                {detail.compagnie && (
+                  <Ligne label={t('utilisateurs.detailCompagnie')} valeur={detail.compagnie.nom} />
+                )}
+                {detail.typeVehicule && (
+                  <Ligne
+                    label={t('utilisateurs.detailVehicule')}
+                    valeur={libelleVehicule(t, detail.typeVehicule)}
+                  />
+                )}
+                {detail.plaque && (
+                  <Ligne label={t('utilisateurs.detailPlaque')} valeur={detail.plaque} />
+                )}
+                <Ligne
+                  label={t('utilisateurs.detailRecensePar')}
+                  valeur={detail.agent?.nom ?? t('utilisateurs.inconnu')}
+                />
               </div>
               {detail.statut !== 'VALIDE' && (
                 <div className="p-5 border-t border-gray-100 flex gap-2.5">
@@ -334,7 +368,7 @@ export function Utilisateurs() {
                     }}
                     className="flex-1 py-2.5 rounded-xl border border-red-200 text-red-600 font-semibold text-sm hover:bg-red-50 transition"
                   >
-                    Rejeter
+                    {t('commun.rejeter')}
                   </button>
                   <button
                     onClick={() => {
@@ -343,7 +377,7 @@ export function Utilisateurs() {
                     }}
                     className="flex-1 py-2.5 rounded-xl bg-coli-vert text-white font-semibold text-sm hover:bg-emerald-600 transition"
                   >
-                    Valider
+                    {t('commun.valider')}
                   </button>
                 </div>
               )}
@@ -352,7 +386,7 @@ export function Utilisateurs() {
                   onClick={() => archiver.mutate(detail.id)}
                   className="w-full py-2 text-xs text-gray-400 hover:text-red-500 transition"
                 >
-                  Archiver cette fiche
+                  {t('utilisateurs.archiverFiche')}
                 </button>
               </div>
             </div>

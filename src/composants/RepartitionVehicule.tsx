@@ -32,7 +32,9 @@ export function RepartitionVehicule({
         {parVehicule.map((v, i) => (
           <div key={v.type}>
             <div className="flex justify-between text-xs mb-1.5">
-              <span className="text-gray-600">{v.type}</span>
+              <span className="text-gray-600">
+                {t(`roles.${v.type}`, { defaultValue: v.type })}
+              </span>
               <span className="font-semibold text-coli-encre">
                 {v.pourcent}%
               </span>

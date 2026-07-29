@@ -21,10 +21,10 @@ function initiales(nom: string): string {
     .toUpperCase();
 }
 
-const STATUT_STYLE: Record<string, { bg: string; texte: string; libelle: string }> = {
-  VALIDE: { bg: '#e8f8f3', texte: '#0F6E56', libelle: 'Valide' },
-  EN_ATTENTE: { bg: '#fdf0e3', texte: '#985a12', libelle: 'En attente' },
-  REJETE: { bg: '#fdeaea', texte: '#a32d2d', libelle: 'Rejete' },
+const STATUT_STYLE: Record<string, { bg: string; texte: string; cle: string }> = {
+  VALIDE: { bg: '#e8f8f3', texte: '#0F6E56', cle: 'VALIDE' },
+  EN_ATTENTE: { bg: '#fdf0e3', texte: '#985a12', cle: 'EN_ATTENTE' },
+  REJETE: { bg: '#fdeaea', texte: '#a32d2d', cle: 'REJETE' },
 };
 
 export function TableauDeBord() {
@@ -36,9 +36,9 @@ export function TableauDeBord() {
 
   // Repartition par statut, pour le panneau de droite.
   const parStatut = [
-    { cle: 'VALIDE', label: 'Validees', couleur: '#1FB89E', valeur: data?.valides ?? 0 },
-    { cle: 'EN_ATTENTE', label: 'En attente', couleur: '#F28C28', valeur: data?.attente ?? 0 },
-    { cle: 'REJETE', label: 'Rejetees', couleur: '#E24B4A', valeur: data?.rejetes ?? 0 },
+    { cle: 'VALIDE', label: t('tableau.validees'), couleur: '#1FB89E', valeur: data?.valides ?? 0 },
+    { cle: 'EN_ATTENTE', label: t('tableau.attente'), couleur: '#F28C28', valeur: data?.attente ?? 0 },
+    { cle: 'REJETE', label: t('tableau.rejetees'), couleur: '#E24B4A', valeur: data?.rejetes ?? 0 },
   ];
   const totalStatut = parStatut.reduce((s, x) => s + x.valeur, 0) || 1;
 
@@ -111,14 +111,14 @@ export function TableauDeBord() {
                     <div className="min-w-0">
                       <div className="text-sm font-medium text-coli-encre truncate">{r.nom}</div>
                       <div className="text-xs text-gray-400 truncate">
-                        {r.type} · {r.lieu}
+                        {t(`roles.${r.type}`, { defaultValue: r.type })} · {r.lieu}
                       </div>
                     </div>
                     <span
                       className="text-[10px] font-semibold px-2.5 py-1 rounded-full ml-auto shrink-0"
                       style={{ background: s.bg, color: s.texte }}
                     >
-                      {s.libelle}
+                      {t(`statuts.${s.cle}`)}
                     </span>
                   </div>
                 );

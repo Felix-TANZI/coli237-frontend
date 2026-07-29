@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ajouterDocument, TYPES_DOCUMENT } from '../api/personnes';
 
 interface DocExistant {
@@ -16,6 +17,7 @@ export function GestionDocuments({
   personneId: string;
   documents?: DocExistant[];
 }) {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [type, setType] = useState('CNI');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,8 +38,11 @@ export function GestionDocuments({
     e.target.value = ''; // reset pour pouvoir renvoyer le meme fichier
   };
 
-  const libelleType = (t: string) =>
-    TYPES_DOCUMENT.find((d) => d.valeur === t)?.libelle ?? t;
+  // Libelle traduit d'un type de document (repli : le libelle par defaut).
+  const libelleType = (valeur: string) =>
+    t(`documents.${valeur}`, {
+      defaultValue: TYPES_DOCUMENT.find((d) => d.valeur === valeur)?.libelle ?? valeur,
+    });
 
   return (
     <div>
@@ -67,7 +72,7 @@ export function GestionDocuments({
           >
             {TYPES_DOCUMENT.map((d) => (
               <option key={d.valeur} value={d.valeur}>
-                {d.libelle}
+                {libelleType(d.valeur)}
               </option>
             ))}
           </select>
@@ -83,7 +88,7 @@ export function GestionDocuments({
           ) : (
             <i className="ti ti-upload" />
           )}
-          Ajouter
+          {t('documents.ajouter')}
         </button>
         <input
           ref={inputRef}
@@ -97,13 +102,13 @@ export function GestionDocuments({
       {upload.isError && (
         <p className="text-xs text-red-600 mt-2 flex items-center gap-1">
           <i className="ti ti-alert-circle" />
-          Echec de l'envoi. Formats : jpg, png, pdf. Max 5 Mo.
+          {t('documents.erreurEnvoi')}
         </p>
       )}
       {upload.isSuccess && (
         <p className="text-xs text-coli-vert mt-2 flex items-center gap-1">
           <i className="ti ti-circle-check" />
-          Document ajoute.
+          {t('documents.ajoute')}
         </p>
       )}
     </div>

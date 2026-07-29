@@ -30,7 +30,9 @@
     "dejaCompte": "Déjà un compte ?",
     "seConnecterLien": "Se connecter",
     "pasCompte": "Pas encore de compte ?",
-    "emailDejaUtilise": "Cet email ou téléphone est déjà utilisé."
+    "emailDejaUtilise": "Cet email ou téléphone est déjà utilisé.",
+    "emailPlaceholder": "exemple@mail.com",
+    "telPlaceholder": "6 90 12 34 56"
   },
   "carte": {
     "valide": "validé",
@@ -44,8 +46,7 @@
     "export": "Export",
     "deconnexion": "Déconnexion",
     "utilisateurs": "Utilisateurs",
-    "compagnies": "Compagnies",
-    "navCompagnies": "Compagnies"
+    "compagnies": "Compagnies"
   },
   "tableau": {
     "titre": "Recensement national",
@@ -69,7 +70,9 @@
     "total": "Personnes",
     "livreurs": "Livreurs",
     "etatValidations": "Etat des validations",
-    "classementAgents": "Agents les plus actifs"
+    "classementAgents": "Agents les plus actifs",
+    "validees": "Validées",
+    "rejetees": "Rejetées"
   },
   "coursiers": {
     "titre": "Coursiers",
@@ -162,8 +165,7 @@
     "copier": "Copier",
     "copie": "Copié",
     "fermer": "Fermer",
-    "sur": "sur",
-    "navCompagnies": "Compagnies"
+    "sur": "sur"
   },
   "export": {
     "titre": "Export des données",
@@ -180,14 +182,30 @@
     "sectionCoursiers": "Coursiers freelance",
     "sectionPartenaires": "Entreprises partenaires",
     "excelTextePartenaire": "Tableau des entreprises partenaires validées : responsable, contact, coursiers rattachés.",
-    "pdfTextePartenaire": "Version imprimable de la liste des entreprises partenaires validées."
+    "pdfTextePartenaire": "Version imprimable de la liste des entreprises partenaires validées.",
+    "registreTitre": "Export du registre",
+    "registreSousTitre": "Téléchargez les personnes validées, transmises à COLI.",
+    "registreInfo": "Seules les fiches validées sont exportées. Filtrez par rôle pour un export ciblé.",
+    "roleAExporter": "Rôle à exporter",
+    "toutesPersonnes": "Toutes les personnes",
+    "fichesAExporter_one": "{{count}} fiche validée à exporter",
+    "fichesAExporter_many": "{{count}} fiches validées à exporter",
+    "fichesAExporter_other": "{{count}} fiches validées à exporter",
+    "formatExcel": "Format Excel",
+    "formatExcelTexte": "Tableur complet, idéal pour le traitement et l'import dans un autre système.",
+    "formatPdf": "Format PDF",
+    "formatPdfTexte": "Registre mis en page, prêt à imprimer ou à partager.",
+    "erreurTelechargement": "Erreur lors du téléchargement",
+    "telechargerN": "Télécharger ({{n}})"
   },
   "agent": {
     "bonjourMatin": "Bonjour",
     "bonjourApresMidi": "Bon après-midi",
     "bonjourSoir": "Bonsoir",
-    "aSynchroniser": "{{n}} fiche à synchroniser",
-    "aSynchroniser_plural": "{{n}} fiches à synchroniser",
+    "aSynchroniser": "{{count}} fiche à synchroniser",
+    "aSynchroniser_one": "{{count}} fiche à synchroniser",
+    "aSynchroniser_many": "{{count}} fiches à synchroniser",
+    "aSynchroniser_other": "{{count}} fiches à synchroniser",
     "toutSynchronise": "Tout est synchronisé",
     "recenses": "Recensés",
     "enAttente": "En attente",
@@ -204,6 +222,7 @@
     "navFiches": "Mes fiches",
     "navRecenser": "Recenser",
     "navProfil": "Profil",
+    "navCompagnies": "Compagnies",
     "deconnexion": "Déconnexion",
     "valides": "Validés",
     "ceJour": "Ce jour",
@@ -215,8 +234,7 @@
     "partenaireLivraison": "Partenaire de livraison",
     "monRythme": "Mon rythme",
     "septJours": "7 jours",
-    "objectifJour": "Objectif du jour",
-    "navCompagnies": "Compagnies"
+    "objectifJour": "Objectif du jour"
   },
   "recensement": {
     "retour": "Retour",
@@ -278,7 +296,9 @@
     "operateurAuto": "Détecté à la saisie du numéro",
     "operateurDetecte": "Détecté automatiquement",
     "marqueAide": "Choisissez une marque ou saisissez librement",
-    "quartierAide": "Quartiers suggérés pour cette ville"
+    "quartierAide": "Quartiers suggérés pour cette ville",
+    "succesLocalTitre": "Enregistré hors-ligne",
+    "succesLocalTexte": "La fiche est sauvegardée sur l'appareil. Elle sera envoyée automatiquement dès le retour du réseau."
   },
   "validation": {
     "nomCourt": "Le nom doit contenir au moins 2 caractères",
@@ -287,15 +307,35 @@
     "cniAide": "Numéro figurant sur la carte d'identité",
     "cniErreur": "Le numéro CNI semble incorrect",
     "momoAide": "Numéro Mobile Money (commence par 6)",
-    "momoErreur": "Numéro Mobile Money invalide",
-    "succesLocalTitre": "Enregistré hors-ligne",
-    "succesLocalTexte": "La fiche est sauvegardée sur l'appareil. Elle sera envoyée automatiquement dès le retour du réseau."
+    "momoErreur": "Numéro Mobile Money invalide"
   },
   "mesFiches": {
     "titre": "Mes fiches",
-    "sousTitre": "{{total}} recensement au total",
-    "sousTitre_plural": "{{total}} recensements au total",
+    "sousTitre": "{{count}} recensement au total",
+    "sousTitre_one": "{{count}} recensement au total",
+    "sousTitre_many": "{{count}} recensements au total",
+    "sousTitre_other": "{{count}} recensements au total",
     "rechercher": "Rechercher...",
+    "rechercherPlaceholder": "Rechercher un nom, téléphone...",
+    "statTotal": "Total",
+    "statAttente": "En attente",
+    "statValidees": "Validées",
+    "tousRoles": "Tous les rôles",
+    "tousStatuts": "Tous statuts",
+    "colNom": "Nom",
+    "colTelephone": "Téléphone",
+    "colRole": "Rôle",
+    "colStatut": "Statut",
+    "modifier": "Modifier",
+    "verrouillee": "Verrouillée",
+    "modaleTitre": "Modifier la fiche",
+    "prenom": "Prénom",
+    "nom": "Nom",
+    "telephone": "Téléphone",
+    "email": "Email",
+    "plaque": "Plaque",
+    "documentsCoursier": "Documents coursier",
+    "erreurModif": "Modification impossible",
     "tous": "Tous",
     "coursiers": "Coursiers",
     "partenaires": "Entreprises",
@@ -335,5 +375,151 @@
     "mdpErreur": "Ancien mot de passe incorrect",
     "valider": "Valider",
     "mdpChange": "Mot de passe modifié"
+  },
+  "commun": {
+    "annuler": "Annuler",
+    "creer": "Créer",
+    "enregistrer": "Enregistrer",
+    "fermer": "Fermer",
+    "modifier": "Modifier",
+    "valider": "Valider",
+    "rejeter": "Rejeter",
+    "archiver": "Archiver",
+    "selectionner": "Sélectionner...",
+    "erreurCreation": "Erreur lors de la création"
+  },
+  "roles": {
+    "LIVREUR_INDEPENDANT": "Livreur indépendant",
+    "LIVREUR_AGENCE": "Livreur agence",
+    "ADMIN_COMPAGNIE": "Admin compagnie",
+    "MANAGER_AGENCE": "Manager agence"
+  },
+  "statuts": {
+    "EN_ATTENTE": "En attente",
+    "VALIDE": "Validé",
+    "REJETE": "Rejeté",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive"
+  },
+  "vehicules": {
+    "MOTO": "Moto",
+    "TRICYCLE": "Tricycle",
+    "VOITURE": "Voiture",
+    "CAMIONNETTE": "Camionnette",
+    "AUTRE": "Autre"
+  },
+  "documents": {
+    "CNI": "CNI",
+    "PERMIS": "Permis",
+    "CARTE_GRISE": "Carte grise",
+    "ASSURANCE": "Assurance",
+    "PHOTO_IDENTITE": "Photo d'identité",
+    "AUTRE": "Autre",
+    "ajouter": "Ajouter",
+    "erreurEnvoi": "Échec de l'envoi. Formats : jpg, png, pdf. Max 5 Mo.",
+    "ajoute": "Document ajouté."
+  },
+  "jours": {
+    "0": "D",
+    "1": "L",
+    "2": "M",
+    "3": "M",
+    "4": "J",
+    "5": "V",
+    "6": "S"
+  },
+  "pays": {
+    "CM": "Cameroun",
+    "TD": "Tchad",
+    "CF": "RCA",
+    "GA": "Gabon",
+    "GQ": "Guinée Éq.",
+    "CG": "Congo",
+    "NG": "Nigeria"
+  },
+  "formulaire": {
+    "role": "Rôle",
+    "identite": "Identité",
+    "vehicule": "Véhicule",
+    "rattachement": "Rattachement",
+    "documentsCoursier": "Documents coursier",
+    "prenom": "Prénom",
+    "nom": "Nom",
+    "telephone": "Téléphone",
+    "emailOptionnel": "Email (optionnel)",
+    "typeVehicule": "Type de véhicule",
+    "preciserType": "Préciser le type",
+    "preciserPlaceholder": "Ex : Vélo cargo",
+    "plaque": "Plaque",
+    "plaquePlaceholder": "CE 123 AB",
+    "compagnie": "Compagnie",
+    "aucuneCompagnie": "Aucune compagnie. Utilisez le bouton + pour en créer une.",
+    "docsApresCreation": "Les documents (CNI, permis...) pourront être ajoutés après la création de la fiche.",
+    "docsApresEnregistrement": "Les documents (CNI, permis...) pourront être ajoutés après l'enregistrement de la fiche.",
+    "telErreur": "Pour {{pays}}, le numéro doit faire {{n}} chiffres."
+  },
+  "compagnies": {
+    "titre": "Compagnies",
+    "sousTitre_one": "{{count}} compagnie enregistrée",
+    "sousTitre_many": "{{count}} compagnies enregistrées",
+    "sousTitre_other": "{{count}} compagnies enregistrées",
+    "nouvelle": "Nouvelle compagnie",
+    "rechercher": "Rechercher une compagnie...",
+    "colCompagnie": "Compagnie",
+    "colRecensePar": "Recensé par",
+    "colAdmin": "Admin",
+    "colStatut": "Statut",
+    "colPersonnes": "Personnes",
+    "aucune": "Aucune compagnie",
+    "recenseParNom": "Recensé par : {{nom}}",
+    "adminNom": "Admin : {{nom}}",
+    "sansAdmin": "Sans admin",
+    "personnes_one": "{{count}} personne",
+    "personnes_many": "{{count}} personnes",
+    "personnes_other": "{{count}} personnes",
+    "modaleSousTitre": "Renseignez les informations",
+    "nomLabel": "Nom de la compagnie",
+    "nomPlaceholder": "Ex : SwiftLink Delivery",
+    "statutLabel": "Statut",
+    "adminLabel": "Admin compagnie (optionnel)",
+    "aucunAdmin": "Aucun admin",
+    "aucunAdminRecense": "Aucun admin compagnie recensé pour l'instant.",
+    "selectionner": "Sélectionner une compagnie",
+    "creerAria": "Créer une compagnie",
+    "archiverAria": "Archiver"
+  },
+  "utilisateurs": {
+    "titre": "Utilisateurs",
+    "sousTitre_one": "{{count}} personne recensée",
+    "sousTitre_many": "{{count}} personnes recensées",
+    "sousTitre_other": "{{count}} personnes recensées",
+    "nouveau": "Nouvel utilisateur",
+    "rechercher": "Nom, téléphone...",
+    "tousRoles": "Tous les rôles",
+    "tousStatuts": "Tous statuts",
+    "colNom": "Nom",
+    "colTelephone": "Téléphone",
+    "colRole": "Rôle",
+    "colRecensePar": "Recensé par",
+    "colStatut": "Statut",
+    "aucune": "Aucune personne ne correspond",
+    "detailTelephone": "Téléphone",
+    "detailEmail": "Email",
+    "detailVille": "Ville",
+    "detailCompagnie": "Compagnie",
+    "detailVehicule": "Véhicule",
+    "detailPlaque": "Plaque",
+    "detailRecensePar": "Recensé par",
+    "inconnu": "Inconnu",
+    "archiverFiche": "Archiver cette fiche",
+    "modaleTitre": "Nouvel utilisateur",
+    "modaleSousTitre": "Recensement d'une personne",
+    "creerUtilisateur": "Créer l'utilisateur"
+  },
+  "recenser": {
+    "titre": "Nouveau recensement",
+    "sousTitre": "Choisissez un rôle et remplissez la fiche",
+    "enregistrerFiche": "Enregistrer la fiche",
+    "erreur": "Erreur lors de l'enregistrement"
   }
 }

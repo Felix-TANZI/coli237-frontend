@@ -1,13 +1,15 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { listerPersonnes } from '../api/personnes';
 import { exporterPersonnesExcel, exporterPersonnesPdf } from '../api/export';
 import { BarreNav, BarreNavMobile } from '../composants/BarreNav';
-import { LISTE_ROLES, ROLES } from '../composants/roles';
+import { LISTE_ROLES } from '../composants/roles';
 
 const OMBRE = '0 1px 3px rgba(14,26,36,.04), 0 4px 16px rgba(14,26,36,.06)';
 
 export function Export() {
+  const { t } = useTranslation();
   const [role, setRole] = useState('');
 
   const { data: personnes = [] } = useQuery({
@@ -33,24 +35,22 @@ export function Export() {
             className="font-extrabold text-xl sm:text-2xl text-coli-encre tracking-tight"
             style={{ fontFamily: 'Sora, Inter' }}
           >
-            Export du registre
+            {t('export.registreTitre')}
           </h1>
           <p className="text-xs sm:text-sm text-gray-400 mt-0.5">
-            Telechargez les personnes validees, transmises a COLI.
+            {t('export.registreSousTitre')}
           </p>
         </div>
 
         <div className="flex gap-3 bg-cyan-50/60 border border-cyan-100 rounded-xl p-4 mb-6">
           <i className="ti ti-info-circle text-coli-cyan text-lg shrink-0" />
-          <p className="text-xs sm:text-sm text-gray-600">
-            Seules les fiches validees sont exportees. Filtrez par role pour un export cible.
-          </p>
+          <p className="text-xs sm:text-sm text-gray-600">{t('export.registreInfo')}</p>
         </div>
 
         {/* Filtre par role */}
         <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-4" style={{ boxShadow: OMBRE }}>
           <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-            Role a exporter
+            {t('export.roleAExporter')}
           </label>
           <div className="relative max-w-sm">
             <i className="ti ti-user-circle absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -59,17 +59,17 @@ export function Export() {
               onChange={(e) => setRole(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-coli-encre outline-none appearance-none cursor-pointer hover:border-gray-300 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 transition"
             >
-              <option value="">Toutes les personnes</option>
+              <option value="">{t('export.toutesPersonnes')}</option>
               {LISTE_ROLES.map((r) => (
                 <option key={r} value={r}>
-                  {ROLES[r].libelle}
+                  {t(`roles.${r}`)}
                 </option>
               ))}
             </select>
             <i className="ti ti-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm" />
           </div>
           <p className="text-xs text-gray-400 mt-2">
-            {valides} fiche{valides > 1 ? 's' : ''} validee{valides > 1 ? 's' : ''} a exporter
+            {t('export.fichesAExporter', { count: valides })}
           </p>
         </div>
 
@@ -79,8 +79,8 @@ export function Export() {
             icone="ti-file-spreadsheet"
             couleur="#1FB89E"
             fond="#e8f8f3"
-            titre="Format Excel"
-            texte="Tableur complet, ideal pour le traitement et l'import dans un autre systeme."
+            titre={t('export.formatExcel')}
+            texte={t('export.formatExcelTexte')}
             nombre={valides}
             enCours={excel.isPending}
             erreur={excel.isError}
@@ -90,8 +90,8 @@ export function Export() {
             icone="ti-file-type-pdf"
             couleur="#E24B4A"
             fond="#fdeaea"
-            titre="Format PDF"
-            texte="Registre mis en page, pret a imprimer ou a partager."
+            titre={t('export.formatPdf')}
+            texte={t('export.formatPdfTexte')}
             nombre={valides}
             enCours={pdf.isPending}
             erreur={pdf.isError}
@@ -126,6 +126,7 @@ function CarteExport({
   erreur: boolean;
   onClic: () => void;
 }) {
+  const { t } = useTranslation();
   const desactive = nombre === 0;
 
   return (
@@ -142,7 +143,7 @@ function CarteExport({
       {erreur && (
         <p className="text-xs text-red-600 mb-2 flex items-center gap-1">
           <i className="ti ti-alert-circle" />
-          Erreur lors du telechargement
+          {t('export.erreurTelechargement')}
         </p>
       )}
 
@@ -153,7 +154,7 @@ function CarteExport({
         style={{ background: couleur }}
       >
         <i className={`ti ${enCours ? 'ti-loader-2 animate-spin' : 'ti-download'}`} />
-        {enCours ? 'Generation...' : `Telecharger (${nombre})`}
+        {enCours ? t('export.generation') : t('export.telechargerN', { n: nombre })}
       </button>
     </div>
   );

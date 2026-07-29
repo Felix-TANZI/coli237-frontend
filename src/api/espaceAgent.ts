@@ -1,6 +1,5 @@
 import { api } from './client';
 import { agentConnecte } from './auth';
-import { ROLES } from '../composants/roles';
 import type { Personne } from './personnes';
 
 // Objectif quotidien de recensements (ajustable plus tard cote admin).
@@ -11,7 +10,8 @@ export interface MesStats {
   attente: number;
   valides: number;
   ceJour: number;
-  rythme: { jour: string; nombre: number; estAujourdhui: boolean }[];
+  // `jour` : index du jour de la semaine (0 = dimanche), traduit a l'affichage.
+  rythme: { jour: number; nombre: number; estAujourdhui: boolean }[];
   recents: {
     id: string;
     nom: string;
@@ -30,13 +30,6 @@ function memeJour(a: Date, b: Date): boolean {
   );
 }
 
-const LETTRES_JOUR = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
-
-// Libelle court du role, pour l'affichage.
-function libelleRole(role: string): string {
-  return ROLES[role as keyof typeof ROLES]?.libelle ?? role;
-}
-
 export async function mesRecensements(): Promise<MesStats> {
   const moi = agentConnecte();
   const monId = moi?.id;
@@ -52,11 +45,11 @@ export async function mesRecensements(): Promise<MesStats> {
   // Rythme des 7 derniers jours.
   const rythme = [];
   for (let i = 6; i >= 0; i--) {
-    const jour = new Date(now);
-    jour.setDate(now.getDate() - i);
-    const nombre = miennes.filter((x) => memeJour(new Date(x.createdAt), jour)).length;
+    const date = new Date(now);
+    date.setDate(now.getDate() - i);
+    const nombre = miennes.filter((x) => memeJour(new Date(x.createdAt), date)).length;
     rythme.push({
-      jour: LETTRES_JOUR[jour.getDay()],
+      jour: date.getDay(),
       nombre,
       estAujourdhui: i === 0,
     });
@@ -66,7 +59,7 @@ export async function mesRecensements(): Promise<MesStats> {
     .map((p) => ({
       id: p.id,
       nom: `${p.prenom} ${p.nom}`,
-      type: libelleRole(p.role),
+      type: p.role,
       lieu: p.ville ?? '—',
       statut: p.statut,
       date: p.createdAt,
@@ -109,7 +102,7 @@ export async function mesFiches(): Promise<MaFiche[]> {
       prenom: p.prenom,
       nom: p.nom,
       role: p.role,
-      type: libelleRole(p.role),
+      type: p.role,
       email: p.email,
       telephone: p.telephone,
       typeVehicule: p.typeVehicule,

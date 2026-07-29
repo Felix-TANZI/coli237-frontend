@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Pays proposes : Cameroun + voisins. maxChiffres = longueur du numero
-// national (sans indicatif).
+// national (sans indicatif). Le nom affiche vient de la traduction "pays".
 const PAYS = [
   { code: 'CM', nom: 'Cameroun', indicatif: '+237', drapeau: '🇨🇲', maxChiffres: 9 },
   { code: 'TD', nom: 'Tchad', indicatif: '+235', drapeau: '🇹🇩', maxChiffres: 8 },
@@ -25,6 +26,7 @@ export function ChampTelephone({
   onChange: (v: string) => void;
   requis?: boolean;
 }) {
+  const { t } = useTranslation();
   const [codePays, setCodePays] = useState('CM');
   const pays = PAYS.find((p) => p.code === codePays) ?? PAYS[0];
 
@@ -106,7 +108,10 @@ export function ChampTelephone({
       </div>
       {montrerErreur && (
         <p className="text-[11px] text-red-500 mt-1">
-          Le numero doit faire {pays.maxChiffres} chiffres pour {pays.nom}.
+          {t('formulaire.telErreur', {
+            n: pays.maxChiffres,
+            pays: t(`pays.${pays.code}`, { defaultValue: pays.nom }),
+          })}
         </p>
       )}
     </div>

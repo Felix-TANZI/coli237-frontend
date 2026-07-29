@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { mesFiches, type MaFiche } from '../../api/espaceAgent';
 import { modifierPersonne } from '../../api/personnes';
 import { NavAgentBas, NavAgentHaut } from '../../composants/NavAgent';
@@ -22,15 +23,16 @@ function formaterTel(tel: string): string {
   return `+237 ${n[0]} ${n.slice(1).replace(/(\d{2})(?=\d)/g, '$1 ')}`.trim();
 }
 
-const STATUT: Record<string, { bg: string; texte: string; label: string; icone: string }> = {
-  VALIDE: { bg: '#e8f8f3', texte: '#0F6E56', label: 'Valide', icone: 'ti-circle-check' },
-  EN_ATTENTE: { bg: '#fdf0e3', texte: '#985a12', label: 'En attente', icone: 'ti-clock' },
-  REJETE: { bg: '#fdeaea', texte: '#a32d2d', label: 'Rejete', icone: 'ti-alert-triangle' },
+const STATUT: Record<string, { bg: string; texte: string; cle: string; icone: string }> = {
+  VALIDE: { bg: '#e8f8f3', texte: '#0F6E56', cle: 'VALIDE', icone: 'ti-circle-check' },
+  EN_ATTENTE: { bg: '#fdf0e3', texte: '#985a12', cle: 'EN_ATTENTE', icone: 'ti-clock' },
+  REJETE: { bg: '#fdeaea', texte: '#a32d2d', cle: 'REJETE', icone: 'ti-alert-triangle' },
 };
 
 const OMBRE = '0 1px 3px rgba(14,26,36,.04), 0 4px 16px rgba(14,26,36,.06)';
 
 export function MesFiches() {
+  const { t } = useTranslation();
   const moi = agentConnecte();
   const [filtreRole, setFiltreRole] = useState('');
   const [filtreStatut, setFiltreStatut] = useState('');
@@ -73,18 +75,33 @@ export function MesFiches() {
             className="font-extrabold text-xl md:text-2xl text-coli-encre tracking-tight"
             style={{ fontFamily: 'Sora, Inter' }}
           >
-            Mes fiches
+            {t('mesFiches.titre')}
           </h1>
           <p className="text-xs md:text-sm text-gray-400 mt-0.5">
-            {stats.total} recensement{stats.total > 1 ? 's' : ''} au total
+            {t('mesFiches.sousTitre', { count: stats.total })}
           </p>
         </div>
 
         {/* Bandeau de stats */}
         <div className="grid grid-cols-3 gap-3 mb-5">
-          <MiniStat valeur={stats.total} label="Total" couleur="#17A2B8" icone="ti-clipboard-list" />
-          <MiniStat valeur={stats.attente} label="En attente" couleur="#F28C28" icone="ti-clock" />
-          <MiniStat valeur={stats.valides} label="Validees" couleur="#1FB89E" icone="ti-circle-check" />
+          <MiniStat
+            valeur={stats.total}
+            label={t('mesFiches.statTotal')}
+            couleur="#17A2B8"
+            icone="ti-clipboard-list"
+          />
+          <MiniStat
+            valeur={stats.attente}
+            label={t('mesFiches.statAttente')}
+            couleur="#F28C28"
+            icone="ti-clock"
+          />
+          <MiniStat
+            valeur={stats.valides}
+            label={t('mesFiches.statValidees')}
+            couleur="#1FB89E"
+            icone="ti-circle-check"
+          />
         </div>
 
         {/* Barre d'outils */}
@@ -97,7 +114,7 @@ export function MesFiches() {
             <input
               value={recherche}
               onChange={(e) => setRecherche(e.target.value)}
-              placeholder="Rechercher un nom, telephone..."
+              placeholder={t('mesFiches.rechercherPlaceholder')}
               className="outline-none text-sm flex-1 bg-transparent"
             />
           </div>
@@ -111,10 +128,10 @@ export function MesFiches() {
               className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-coli-encre outline-none appearance-none cursor-pointer hover:border-gray-300 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 transition"
               style={{ boxShadow: OMBRE }}
             >
-              <option value="">Tous les roles</option>
+              <option value="">{t('mesFiches.tousRoles')}</option>
               {LISTE_ROLES.map((r) => (
                 <option key={r} value={r}>
-                  {ROLES[r].libelle}
+                  {t(`roles.${r}`)}
                 </option>
               ))}
             </select>
@@ -130,10 +147,10 @@ export function MesFiches() {
               className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-coli-encre outline-none appearance-none cursor-pointer hover:border-gray-300 focus:border-coli-cyan focus:ring-4 focus:ring-coli-cyan/10 transition"
               style={{ boxShadow: OMBRE }}
             >
-              <option value="">Tous statuts</option>
-              <option value="EN_ATTENTE">En attente</option>
-              <option value="VALIDE">Valide</option>
-              <option value="REJETE">Rejete</option>
+              <option value="">{t('mesFiches.tousStatuts')}</option>
+              <option value="EN_ATTENTE">{t('statuts.EN_ATTENTE')}</option>
+              <option value="VALIDE">{t('statuts.VALIDE')}</option>
+              <option value="REJETE">{t('statuts.REJETE')}</option>
             </select>
             <i className="ti ti-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm" />
           </div>
@@ -145,16 +162,16 @@ export function MesFiches() {
           style={{ boxShadow: OMBRE }}
         >
           <div className="grid grid-cols-[2fr_1.4fr_1.4fr_1fr_auto] gap-3 px-5 py-3 bg-gray-50/70 border-b border-gray-100 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
-            <div>Nom</div>
-            <div>Telephone</div>
-            <div>Role</div>
-            <div>Statut</div>
+            <div>{t('mesFiches.colNom')}</div>
+            <div>{t('mesFiches.colTelephone')}</div>
+            <div>{t('mesFiches.colRole')}</div>
+            <div>{t('mesFiches.colStatut')}</div>
             <div></div>
           </div>
           {isLoading && <div className="px-5 py-8 text-center text-gray-400 text-sm">···</div>}
           {!isLoading && filtrees.length === 0 && (
             <div className="px-5 py-10 text-center text-gray-400 text-sm">
-              Aucune fiche ne correspond
+              {t('mesFiches.aucunFiltre')}
             </div>
           )}
           {filtrees.map((f) => {
@@ -186,7 +203,7 @@ export function MesFiches() {
                     className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
                     style={{ background: info?.fond, color: info?.couleur }}
                   >
-                    {info?.libelle ?? f.type}
+                    {t(`roles.${f.role}`, { defaultValue: f.type })}
                   </span>
                 </div>
                 <div>
@@ -195,19 +212,19 @@ export function MesFiches() {
                     style={{ background: s.bg, color: s.texte }}
                   >
                     <i className={`ti ${s.icone} text-[11px]`} />
-                    {s.label}
+                    {t(`statuts.${s.cle}`)}
                   </span>
                 </div>
                 <div className="text-right">
                   {modifiable ? (
                     <span className="text-[11px] text-gray-400 inline-flex items-center gap-1">
                       <i className="ti ti-pencil" />
-                      Modifier
+                      {t('mesFiches.modifier')}
                     </span>
                   ) : (
                     <span className="text-[11px] text-gray-300 inline-flex items-center gap-1">
                       <i className="ti ti-lock" />
-                      Verrouillee
+                      {t('mesFiches.verrouillee')}
                     </span>
                   )}
                 </div>
@@ -220,7 +237,7 @@ export function MesFiches() {
         <div className="md:hidden space-y-2.5">
           {isLoading && <p className="text-sm text-gray-400 py-8 text-center">···</p>}
           {!isLoading && filtrees.length === 0 && (
-            <p className="text-sm text-gray-400 py-8 text-center">Aucune fiche ne correspond</p>
+            <p className="text-sm text-gray-400 py-8 text-center">{t('mesFiches.aucunFiltre')}</p>
           )}
           {filtrees.map((f) => {
             const s = STATUT[f.statut] ?? STATUT.EN_ATTENTE;
@@ -253,7 +270,7 @@ export function MesFiches() {
                     style={{ background: s.bg, color: s.texte }}
                   >
                     <i className={`ti ${s.icone} text-[11px]`} />
-                    {s.label}
+                    {t(`statuts.${s.cle}`)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
@@ -261,17 +278,17 @@ export function MesFiches() {
                     className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
                     style={{ background: info?.fond, color: info?.couleur }}
                   >
-                    {info?.libelle ?? f.type}
+                    {t(`roles.${f.role}`, { defaultValue: f.type })}
                   </span>
                   {modifiable ? (
                     <span className="text-[11px] text-gray-400 flex items-center gap-1">
                       <i className="ti ti-pencil" />
-                      Modifier
+                      {t('mesFiches.modifier')}
                     </span>
                   ) : (
                     <span className="text-[11px] text-gray-300 flex items-center gap-1">
                       <i className="ti ti-lock" />
-                      Verrouillee
+                      {t('mesFiches.verrouillee')}
                     </span>
                   )}
                 </div>
@@ -318,6 +335,7 @@ function MiniStat({
 
 // --- Modal d'edition ---
 function ModaleEdition({ fiche, onFermer }: { fiche: MaFiche; onFermer: () => void }) {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [prenom, setPrenom] = useState(fiche.prenom);
   const [nom, setNom] = useState(fiche.nom);
@@ -354,7 +372,7 @@ function ModaleEdition({ fiche, onFermer }: { fiche: MaFiche; onFermer: () => vo
         style={{ boxShadow: '0 20px 60px rgba(14,26,36,.25)' }}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 sticky top-0 bg-white">
-          <div className="font-bold text-coli-encre">Modifier la fiche</div>
+          <div className="font-bold text-coli-encre">{t('mesFiches.modaleTitre')}</div>
           <button
             onClick={onFermer}
             className="w-8 h-8 rounded-lg hover:bg-gray-100 text-gray-400 flex items-center justify-center"
@@ -364,18 +382,20 @@ function ModaleEdition({ fiche, onFermer }: { fiche: MaFiche; onFermer: () => vo
         </div>
         <div className="p-5 space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <ChampMini label="Prenom" valeur={prenom} onChange={setPrenom} />
-            <ChampMini label="Nom" valeur={nom} onChange={setNom} />
+            <ChampMini label={t('mesFiches.prenom')} valeur={prenom} onChange={setPrenom} />
+            <ChampMini label={t('mesFiches.nom')} valeur={nom} onChange={setNom} />
           </div>
-          <ChampMini label="Telephone" valeur={telephone} onChange={setTelephone} />
-          <ChampMini label="Email" valeur={email} onChange={setEmail} type="email" />
-          {estLivreurAgence && <ChampMini label="Plaque" valeur={plaque} onChange={setPlaque} />}
+          <ChampMini label={t('mesFiches.telephone')} valeur={telephone} onChange={setTelephone} />
+          <ChampMini label={t('mesFiches.email')} valeur={email} onChange={setEmail} type="email" />
+          {estLivreurAgence && (
+            <ChampMini label={t('mesFiches.plaque')} valeur={plaque} onChange={setPlaque} />
+          )}
 
           {fiche.role === 'LIVREUR_INDEPENDANT' && (
             <div className="pt-2 border-t border-gray-100">
               <label className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1.5">
                 <i className="ti ti-files text-coli-vert" />
-                Documents coursier
+                {t('mesFiches.documentsCoursier')}
               </label>
               <GestionDocuments personneId={fiche.id} documents={fiche.documents} />
             </div>
@@ -386,7 +406,7 @@ function ModaleEdition({ fiche, onFermer }: { fiche: MaFiche; onFermer: () => vo
             onClick={onFermer}
             className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition"
           >
-            Annuler
+            {t('commun.annuler')}
           </button>
           <button
             onClick={() => maj.mutate()}
@@ -394,13 +414,13 @@ function ModaleEdition({ fiche, onFermer }: { fiche: MaFiche; onFermer: () => vo
             className="flex-1 py-2.5 rounded-xl bg-coli-vert text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-40 hover:bg-emerald-600 transition"
           >
             {maj.isPending ? <i className="ti ti-loader-2 animate-spin" /> : <i className="ti ti-check" />}
-            Enregistrer
+            {t('commun.enregistrer')}
           </button>
         </div>
         {maj.isError && (
           <p className="text-xs text-red-600 px-5 pb-4 flex items-center gap-1">
             <i className="ti ti-alert-circle" />
-            Modification impossible
+            {t('mesFiches.erreurModif')}
           </p>
         )}
       </div>
